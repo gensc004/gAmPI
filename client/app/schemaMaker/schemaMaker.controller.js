@@ -4,6 +4,9 @@ angular.module('gAmPieApp')
   .controller('SchemaMakerCtrl', function ($scope, $http, Auth) {
   	var currentUser = Auth.getCurrentUser();
   	console.log(currentUser);
+    $http.get('/api/customDataSchema').success(function(success) {
+        console.log(success)
+    })
     $scope.message = 'Hello';
     $scope.numFeilds = [{feild: '', feildType:''}];
     $scope.sections = [{style: '', fieldName: ''}];
@@ -28,8 +31,8 @@ angular.module('gAmPieApp')
     	var toReturn = {
     		name:'test',
     		userId: currentUser._id,
-    		Schema: $scope.numFeilds,
-    		visualization: [{
+    		dataSchema: $scope.numFeilds,
+    		visualizationSchema: [{
     			visType: 'list',
     			sections: $scope.sections
     		}]
