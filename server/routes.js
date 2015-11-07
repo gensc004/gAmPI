@@ -12,6 +12,7 @@ var auth = require('./auth/auth.service');
 module.exports = function(app) {
   console.log(auth.isAuthenticated())
   // Insert routes below
+  app.use('/api/ticTacToeGames', require('./api/ticTacToeGame'));
   app.use('/api/customDataInstances', require('./api/customDataInstance'));
   app.use('/api/customDataSchemas',auth.isAuthenticated(), require('./api/customDataSchema'));
   app.use('/api/things', require('./api/thing'));
