@@ -13,7 +13,7 @@ module.exports = function(app) {
   console.log(auth.isAuthenticated())
   // Insert routes below
   app.use('/api/customDataInstances', require('./api/customDataInstance'));
-  app.use('/api/customDataSchemas', require('./api/customDataSchema'));
+  app.use('/api/customDataSchemas',auth.isAuthenticated(), require('./api/customDataSchema'));
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
 
