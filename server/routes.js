@@ -18,7 +18,7 @@ module.exports = function(app) {
   app.use('/api/users', require('./api/user'));
 
   app.use('/auth', require('./auth'));
-  app.all('/api/*', auth.isAuthenticated());
+  //app.all('/api/*', auth.isAuthenticated());
   app.use('/api', mers({
     mongoose: mongoose
   }).rest())

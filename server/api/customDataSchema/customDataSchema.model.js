@@ -18,4 +18,14 @@ var CustomDataSchemaSchema = new Schema({
   visualizationSchema: Schema.Types.Mixed
 });
 
+CustomDataSchemaSchema.statics.query = function query(q) {
+  var query = {};
+  
+  if(q.name) {
+    query['name'] = q.name;
+  }
+
+  return this.find(query);
+}
+
 module.exports = mongoose.model('CustomDataSchema', CustomDataSchemaSchema);

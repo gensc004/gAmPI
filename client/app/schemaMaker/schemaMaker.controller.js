@@ -8,16 +8,16 @@ angular.module('gAmPieApp')
         console.log(success)
     })
     $scope.message = 'Hello';
-    $scope.numFeilds = [{feild: '', feildType:''}];
+    $scope.numFields = [{field: '', fieldType:''}];
     $scope.sections = [{style: '', fieldName: ''}];
     
 
 
-    $scope.addFeild = function(){
-    	$scope.numFeilds.push({feild:'', feildType:''});
+    $scope.addField = function(){
+    	$scope.numFields.push({field:'', fieldType:''});
     }
-    $scope.removeFeild = function(){
-    	$scope.numFeilds.splice($scope.numFeilds.length - 1, 1);
+    $scope.removeField = function(){
+    	$scope.numFields.splice($scope.numFields.length - 1, 1);
     }
 
     $scope.addSection = function(){
@@ -31,7 +31,7 @@ angular.module('gAmPieApp')
     	var toReturn = {
     		name:'test',
     		userId: currentUser._id,
-    		dataSchema: $scope.numFeilds,
+    		dataSchema: $scope.numFields,
     		visualizationSchema: [{
     			visType: 'list',
     			sections: $scope.sections

@@ -1,0 +1,23 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>gAmPIe</h1>
+    <p class="lead">visualize game data</p>
+  </div>
+</header>
+
+<div class="vizualize" ng-repeat="vis in schema.visualizationSchema">
+	<div ng-repeat="dataPoint in instance.dataPoints">
+		<div ng-repeat="field in vis.sections">
+			<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
+		</div>
+	</div>
+</div>
+
+
+<footer class="footer">
+  <div class="container">
+      <p>gAmPIe</p>
+  </div>
+</footer>

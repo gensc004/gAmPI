@@ -7,7 +7,17 @@ var ObjectId = mongoose.Types.ObjectId;
 
 var CustomDataInstanceSchema = new Schema({
   schemaId: ObjectIdSchema,
-  data: Schema.Types.Mixed
+  dataPoints: Schema.Types.Mixed
 });
+
+CustomDataInstanceSchema.statics.query = function query(q) {
+  var query = {};
+  console.log(q.schemaId);
+  if(q.schemaId) {
+    query['schemaId'] = q.schemaId;
+  }
+
+  return this.find(query);
+}
 
 module.exports = mongoose.model('CustomDataInstance', CustomDataInstanceSchema);
