@@ -7,7 +7,7 @@
   "dependencies": {
     "express": "~4.0.0",
     "morgan": "~1.0.0",
-    "body-parser": "~1.5.0",
+    "body-parser": "^1.5.2",
     "method-override": "~1.0.0",
     "serve-favicon": "~2.0.1",
     "cookie-parser": "~1.0.1",
@@ -25,7 +25,8 @@
     "connect-mongo": "^0.4.1",
     "socket.io": "^1.0.6",
     "socket.io-client": "^1.0.6",
-    "socketio-jwt": "^2.0.2"
+    "socketio-jwt": "^2.0.2",
+    "mers": "^0.14.1"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

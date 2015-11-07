@@ -18,6 +18,8 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/customDataInstance/customDataInstance.socket').register(socket);
+  require('../api/customDataSchema/customDataSchema.socket').register(socket);
   require('../api/thing/thing.socket').register(socket);
 }
 
