@@ -8,9 +8,11 @@
 </header>
 
 <div class="vizualize" ng-repeat="vis in schema.visualizationSchema">
-	<div ng-repeat="dataPoint in instance.dataPoints">
-		<div ng-repeat="field in vis.sections">
-			<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
+	<div ng-repeat="instance in instances">
+		<div ng-repeat="dataPoint in instance.dataPoints">
+			<div ng-repeat="field in vis.sections">
+				<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
+			</div>
 		</div>
 	</div>
 </div>
