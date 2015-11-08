@@ -54,7 +54,20 @@ angular.module('gAmPieApp')
     }
     $http.get('/api/ticTacToeGame').success(function(success) {
     	$scope.games = success.payload;
+    	if ($scope.openGames($scope.games) == 0) {
+  			$scope.lobbyMessage = "There are no games with open spots. Start a new one!"
+    	}
+    	else {
+    		$scope.lobbyMessage = "Click on a game to join it!"
+    	}
     	socket.syncUpdates('ticTacToeGame', $scope.games, function(event, item, array) {
+    		
+    		if ($scope.openGames($scope.games) == 0) {
+  				$scope.lobbyMessage = "There are no games with open spots. Start a new one!"
+    		}
+    		else {
+    			$scope.lobbyMessage = "Click on a game to join it!"
+    		}
     		if ($scope.currentGame._id == item._id)
  	   			$scope.currentGame=item;
     		
@@ -62,11 +75,12 @@ angular.module('gAmPieApp')
     });
 
     $scope.claimSquare = function(index) {
-    	if($scope.currentGame.turn == $scope.player && $scope.currentGame.values[index] == '_') {
+    	if($scope.currentGame.isActive && $scope.currentGame.turn == $scope.player && $scope.currentGame.values[index] == '_') {
     		$scope.currentGame.values[index] = $scope.player;
     		console.log("Checking: " + $scope.player + ", " + index + ", " + $scope.currentGame.values);
     		if ($scope.hasWon($scope.player, index, $scope.currentGame.values)) {
-    			$scope.currentGame.message = "Player " + $scope.player + " wins!"
+    			$scope.currentGame.message = $scope.player + " wins!"
+    			$scope.currentGame.isActive = false;
     		}
     		else if($scope.player == 'X') {
     			$scope.currentGame.turn = 'O'
@@ -99,6 +113,12 @@ angular.module('gAmPieApp')
 
     $scope.exitGame = function() {
     	$scope.countingDown = false;
+    	console.log("PLAYERS(1): " + $scope.player + " " + $scope.currentGame.playerX + " " + $scope.currentGame.playerY);
+    	if ($scope.player == 'X')
+	    	$scope.currentGame.playerX == null; 
+	    else
+	    	$scope.currentGame.playerY == null;
+    	console.log("PLAYERS(2): " + $scope.currentGame.playerX + " " + $scope.currentGame.playerY);
     	$scope.currentGame = null;
     }
     $scope.opponentLeft = function() {
@@ -118,6 +138,18 @@ angular.module('gAmPieApp')
   		else {
   			return $scope.games[$scope.games.length - 1].name + 1;
   		}
+  	}
+
+  	$scope.openGames = function(games)
+  	{
+  		var gameCount = 0;
+  		for (var i = 0; i < games.length; i++)
+  		{
+  			if (!games[i].playerO || !games[i].playerX) {
+  				gameCount++;
+  			}
+  		}
+  		return gameCount;
   	}
 
   	$scope.hasWon = function(player, move, board)

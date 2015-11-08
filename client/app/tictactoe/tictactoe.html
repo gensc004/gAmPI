@@ -2,8 +2,10 @@
 
 <div class="container" ng-hide="currentGame == null">
 	<span class="container col-md-6">
+		<div class="row">
 		<button type="button" class="btn btn-danger" ng-click="exitGame()" style="margin-bottom:10px"><span class="glyphicon glyphicon-chevron-left"></span> LEAVE</button> 
 		<h3> Game #{{currentGame.name}}: </h3>
+		</div>
 		<br/>
 		<span> 
 			<button class="tButton" ng-click="claimSquare(0)">{{currentGame.values[0]}}</button>
@@ -33,12 +35,13 @@
 		{{currentGame.message}}
 	</span>
 </div>
-<div class="container" ng-hide="currentGame != null">
-	<button type="button" class="btn btn-success" ng-click="createGame()" style="margin-bottom:10px">
-		<span class="glyphicon glyphicon-plus"></span>  CREATE GAME</button>
+<div class="container" ng-model="lobbyMessage" ng-hide="currentGame != null">
+	<h3 style="margin-bottom:15px"> {{lobbyMessage}} </h3>
 	<ul class="list-group">
 		<li class="list-group-item game-list" ng-click="joinGame(game)" ng-repeat="game in games | filter:filterFn">
 			Game #{{game.name}}
 		</li>
 	</ul>
+	<button type="button" class="btn btn-success" ng-click="createGame()" style="margin-bottom:10px">
+		<span class="glyphicon glyphicon-plus"></span>  CREATE GAME</button>
 </div>
