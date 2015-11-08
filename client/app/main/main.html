@@ -3,12 +3,15 @@
 <header class="hero-unit" id="banner-main">
   <div class="container title">
     <h1>Video Game APIs Made Simple</h1>
+    <button ng-hide="showTutorial" ng-click="showTutorial = true" class="btn btn-lg btn-success pull-right" style="position: relative; top: 100px; margin-right: 35px;">Tutotial</button>
+    <button ng-show="showTutorial" ng-click="showTutorial = false" class="btn btn-lg btn-success pull-right" style="position: relative; top: 100px; margin-right: 35px;">Info</button>
     <!-- <p class="lead">This is our motto</p> -->
   </div>
 </header>
 
 
-<section class="section-row">
+
+<section class="section-row" ng-hide="showTutorial">
   <div class="container">
     <div class="col-md-6"> 
       <h2>An API tool for any game</h2>
@@ -19,7 +22,7 @@
   </div>
 </section>
 
-<section class="section-row">
+<section class="section-row" ng-hide="showTutorial">
   <div class="container">
   <div class="col-md-6 section-pic"> pic </div>
     <div class="col-md-6"> 
@@ -30,7 +33,7 @@
   </div>
 </section>
 
-<section class="section-row">
+<section class="section-row" ng-hide="showTutorial">
   <div class="container">
     <div class="col-md-6"> 
       <h2>For Gamers</h2>
@@ -38,6 +41,17 @@
       </p>
     </div>
     <div class="col-md-6 section-pic"> pic </div>
+  </div>
+</section>
+
+<section class="section-row" ng-show="showTutorial">
+  <div class="container">
+    <div class="col-md-12"> 
+      <h2>How to use:</h2>
+      <p>Gampie is a tool to store any game match results of your video game and automatially wrap an API around that data. Track anything from team kills to gold collected. It is perfect to serve everyone your video game data.
+      </p>
+    </div>
+    <!-- <div class="col-md-6 section-pic"> pic </div> -->
   </div>
 </section>
 
