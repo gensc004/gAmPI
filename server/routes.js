@@ -12,9 +12,18 @@ var auth = require('./auth/auth.service');
 module.exports = function(app) {
   console.log(auth.isAuthenticated())
   // Insert routes below
-  app.use('/api/ticTacToeGames', require('./api/ticTacToeGame'));
+  app.use('/api/ticTacToeGames', auth.isAuthenticated(), require('./api/ticTacToeGame'));
+
+
   app.use('/api/customDataInstances', require('./api/customDataInstance'));
+  app.post('/api/customDataInstance', auth.isAuthenticated());
+  app.put('/api/customDataInstance', auth.isAuthenticated());
+  app.delete('/api/customDataInstance', auth.isAuthenticated());
+
   app.use('/api/customDataSchemas',auth.isAuthenticated(), require('./api/customDataSchema'));
+  app.post('/api/customDataSchema', auth.isAuthenticated());
+  app.put('/api/customDataSchema', auth.isAuthenticated());
+  app.delete('/api/customDataSchema', auth.isAuthenticated());
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
 
