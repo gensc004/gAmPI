@@ -1,6 +1,6 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<header class="hero-unit" id="banner">
+<header class="hero-unit" style="padding-top: 70px" id="banner">
   <div class="container">
     <h1>gAmPIe</h1>
     <p class="lead">Create your custom schema</p>
@@ -10,8 +10,8 @@
 <div ng-repeat="schema in schemas" ng-click="goToInstance(schema.name)">
 	<div class="row">
 		<button type="button" class="btn btn-default btn-lg col-sm-10 edit-button" ng-click="schema.isViewing = !schema.isViewing; schema.isEditing = false; schema.isDeleting = false">{{schema.name}}</button>
-		<button type="button" class="btn btn-info btn-lg col-sm-1 edit-button" ng-disabled="schema.userId == currentUser._id" ng-click="schema.isEditing = !schema.isEditing; schema.isViewing = false; schema.isDeleting = false"><span class="glyphicon glyphicon-pencil"></span></button>
-		<button type="button" ng-disabled="schema.userId == currentUser._id" class="btn btn-warning btn-lg col-sm-1 edit-button" ng-click="schema.isDeleting = !schema.isDeleting; schema.isViewing = false; schema.isEditing = false"><span class="glyphicon glyphicon-trash"></span></button>
+		<button type="button" class="btn btn-info btn-lg col-sm-1 edit-button" ng-disabled="schema.userId != currentUser._id" ng-click="schema.isEditing = !schema.isEditing; schema.isViewing = false; schema.isDeleting = false"><span class="glyphicon glyphicon-pencil"></span></button>
+		<button type="button" ng-disabled="schema.userId != currentUser._id" class="btn btn-warning btn-lg col-sm-1 edit-button" ng-click="schema.isDeleting = !schema.isDeleting; schema.isViewing = false; schema.isEditing = false"><span class="glyphicon glyphicon-trash"></span></button>
 	</div>
 
 	<div class="container showing-container" ng-show="schema.isViewing">
@@ -69,7 +69,6 @@
 
 	<div class="container showing-container" ng-show="schema.isEditing">
 		<div class="row">
-			{{schema}}
 			<label class="form-label">Data Fields: </label>
 			<div ng-repeat="field in schema.dataSchema">
 				<div class="col-sm-6"> 
@@ -94,8 +93,10 @@
 					<button ng-show="$last && $index > 0" class="btn btn-warning pull-right finish-editing add-vis" ng-click="deleteField($parent.$parent.$parent.$index, $parent.$parent.$index, $index)">Remove Field</button>
 
 				</div>
-				<button ng-show="$last && vis.visType == 'list'" class="btn btn-success pull-right finish-editing add-vis" ng-click="addList($parent.$index, $index)">Add List</button>
-				<button ng-show="$last && vis.visType == 'list' && $index > 0" class="btn btn-warning pull-right finish-editing add-vis" ng-click="deleteList($parent.$index, $index)">Delete List</button>
+				<div class="col-sm-12">
+					<button ng-show="$last" class="btn btn-success pull-right finish-editing add-vis" ng-click="addList($parent.$index, $index)">Add List</button>
+					<button ng-show="$last && vis.visType == 'list' && $index > 0" class="btn btn-warning pull-right finish-editing add-vis" ng-click="deleteList($parent.$index, $index)">Delete List</button>
+				</div>
 			</div>
 
 			<div ng-repeat="vis in schema.visualizationSchema">
@@ -119,9 +120,10 @@
 					</div>
 				</div>
 				
-
-				<button ng-show="$last && vis.visType == 'line graph'" class="btn btn-success pull-right add-vis" ng-click="addGraph($parent.$index, $index)">Add Graph</button>
-				<button ng-show="$last && vis.visType == 'line graph' && $index > 0" class="btn btn-warning pull-right add-vis" ng-click="deleteGraph($parent.$index, $index)">Delete Graph</button>
+				<div class="col-sm-12">
+					<button ng-show="$last" class="btn btn-success pull-right add-vis" ng-click="addGraph($parent.$index, $index)">Add Graph</button>
+					<button ng-show="$last && vis.visType == 'line graph' && $index > 0" class="btn btn-warning pull-right add-vis" ng-click="deleteGraph($parent.$index, $index)">Delete Graph</button>
+				</div>
 			</div>
 			
 

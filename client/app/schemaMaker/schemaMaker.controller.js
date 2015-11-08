@@ -14,6 +14,18 @@ angular.module('gAmPieApp')
         console.log(success)
     })
 
+    $scope.schema = {
+        dataSchema: [{field: '', fieldType:''}],
+        visualizationSchema: [],
+    }
+
+    $scope.addDataField = function() {
+        $scope.schema.dataSchema.push({field: '', fieldType: ''});
+    }
+    $scope.deleteDataField = function() {
+        $scope.schema.dataSchema.splice($scope.schema.dataSchema - 1, 1);
+    }
+
 
     $scope.message = 'Hello';
     $scope.numFields = [{field: '', fieldType:''}];
@@ -23,30 +35,88 @@ angular.module('gAmPieApp')
     $scope.lists = [];
     $scope.lineGraphs = [];
 
-    $scope.addList = function() {
-    	$scope.lists.push({visType: 'list', sections: [{style: '', fieldName: ''}]})
+    // $scope.addList = function() {
+    // 	$scope.lists.push({visType: 'list', sections: [{style: '', fieldName: ''}]})
+    // }
+
+    // $scope.addLineGraph = function() {
+    // 	$scope.lineGraphs.push({visType: 'line graph', xAxis: '', yAxis: '', labels: [{name: '', field: ''}]})
+    // }
+
+    // $scope.setVisType = function(visType, index) {
+    // 	$scope.visTypes[index] = visType
+    // }
+
+    // $scope.addField = function(){
+    // 	$scope.numFields.push({field:'', fieldType:''});
+    // }
+    // $scope.removeField = function(){
+    // 	$scope.numFields.splice($scope.numFields.length - 1, 1);
+    // }
+
+    // $scope.addSection = function(listId){
+    // 	$scope.lists[listId].sections.push({style: '', fieldName: ''});
+    // }
+    // $scope.removeSection = function(listId){
+    // 	$scope.lists[listId].sections.splice($scope.lists[listId].sections.length - 1, 1);
+    // }
+
+    $scope.numOfLists = 0;
+    $scope.numOfGraphs = 0;
+
+    $scope.addGraph = function(visIndex) {
+        $scope.numOfGraphs++;
+        $scope.schema.visualizationSchema.push({visType: 'line graph' ,title: '', xAxis: '', yAxis: '', xAxisLabel: '', yAxisLabel: ''})
     }
 
-    $scope.addLineGraph = function() {
-    	$scope.lineGraphs.push({visType: 'line graph', xAxis: '', yAxis: '', labels: [{name: '', field: ''}]})
+    $scope.deleteGraph = function() {
+        $scope.numOfGraphs--;
+        $scope.schema.visualizationSchema.splice($scope.schema.visualizationSchema.length - 1, 1)
     }
 
-    $scope.setVisType = function(visType, index) {
-    	$scope.visTypes[index] = visType
+    $scope.addList = function(visIndex) {
+        $scope.numOfLists++;
+        var check = true;
+        for(var i = 0; i < $scope.schema.visualizationSchema.length; i++) {
+            if($scope.schema.visualizationSchema[i].visType == 'line graph') {
+                $scope.schema.visualizationSchema.splice(i - 1, 0, {visType: 'list', sections: [{field: '', fieldType: ''}]});
+                check = false;
+                break;
+            }
+        }
+        if(check) {
+            $scope.schema.visualizationSchema.push({visType: 'list', sections: [{field: '', fieldType: ''}]});
+        }
+        
+
     }
 
-    $scope.addField = function(){
-    	$scope.numFields.push({field:'', fieldType:''});
-    }
-    $scope.removeField = function(){
-    	$scope.numFields.splice($scope.numFields.length - 1, 1);
+    $scope.deleteList = function() {
+        $scope.numOfLists--;
+        var check = true;
+        for(var i = 0; i < $scope.schema.visualizationSchema.length; i++) {
+            if($scope.schema.visualizationSchema[i].visType == 'line graph') {
+                console.log(i)
+                $scope.schema.visualizationSchema.splice(i - 1, 1);
+                check = false;
+                break;
+            }
+        }
+        if(check) {
+            $scope.schema.visualizationSchema.splice($scope.schema.visualizationSchema.length - 1, 1);
+        }
+        
     }
 
-    $scope.addSection = function(listId){
-    	$scope.lists[listId].sections.push({style: '', fieldName: ''});
+    $scope.addField = function(visIndex) {
+        console.log(visIndex)
+        $scope.schema.visualizationSchema[visIndex].sections.push({field: '', fieldType: ''});
+
     }
-    $scope.removeSection = function(listId){
-    	$scope.lists[listId].sections.splice($scope.lists[listId].sections.length - 1, 1);
+
+    $scope.deleteField = function(visIndex) {
+        console.log(visIndex)
+        $scope.schema.visualizationSchema[visIndex].sections.splice($scope.schema.visualizationSchema[visIndex].sections.length - 1, 1);
     }
 
     // $scope.addLineGraphLabel = function(listId){
@@ -58,22 +128,16 @@ angular.module('gAmPieApp')
 
 
 
-    $scope.createFinalObject = function(sectionId) {
+    $scope.createFinalObject = function() {
     	console.log($scope.sections)
     	var toReturn = {
-    		name: $scope.schemaName,
+    		name: $scope.schema.name,
     		userId: currentUser._id,
-    		dataSchema: $scope.numFields,
-    		visualizationSchema: []
+    		dataSchema: $scope.schema.dataSchema,
+    		visualizationSchema: $scope.schema.visualizationSchema
 
     	}
-    	for(var i = 0; i < $scope.lists.length; i++) {
-    		toReturn.visualizationSchema.push($scope.lists[i]);
-    	}
-    	for(var i = 0; i < $scope.lineGraphs.length; i++) {
-    		toReturn.visualizationSchema.push($scope.lineGraphs[i]);
-    	}
-    	console.log(toReturn);
+
     	$http.post("/api/customDataSchema", toReturn).success(function(success){console.log(success)});
     }
 
