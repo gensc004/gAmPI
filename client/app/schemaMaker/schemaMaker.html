@@ -14,7 +14,7 @@
   </div>
   <form class="thing-form">
     <label>Fields</label>
-    <p class="input-group">
+    <div class="input-group">
     	<div ng-repeat="field in numFields" class="form-inline">
       		<input type="text" class="form-control" placeholder="field name" ng-model="numFields[$index].field"> : 
       		<!--<input type="text" class="form-control" placeholder="field type" ng-model="numFields[$index].fieldType">-->
@@ -28,7 +28,7 @@
         <button class="btn btn-primary" ng-click="addField()">+</button>
         <button class="btn btn-primary" ng-click="removeField()" ng-hide="numFields.length < 2">-</button>
       </span>
-    </p>
+    </div>
   </form>
 
   <form class="thing-form">
@@ -40,7 +40,7 @@
 	<div ng-repeat="list in lists">
 		<label class="col-sm-12">Visuals</label>
 	    <div>
-		    <p class="input-group">
+		    <div class="input-group">
 		    	<div ng-repeat="section
 		    	 in list.sections" class="form-inline">
 		      		<!--<input type="text" class="form-control" placeholder="section name" ng-model="sections[$index].style"> -->
@@ -55,11 +55,11 @@
 		        <button class="btn btn-primary" ng-click="addSection($index)">+</button>
 		        <button class="btn btn-primary" ng-click="removeSection($index)" ng-hide="list.sections.length < 2">-</button>
 		      </span>
-		    </p>
+		    </div>
 		</div>
 	</div>
 	<div ng-repeat="lineGraph in lineGraphs">
-	    <p class="input-group">
+	    <div class="input-group">
 	    	<div class="form-inline">
 	    		<input type="text" class="form-control" placeholder="x-axis field" ng-model="lineGraph.xAxis">
 	    		<input type="text" class="form-control" placeholder="y-axis field" ng-model="lineGraph.yAxis">
@@ -72,7 +72,7 @@
 	    		<button class="btn btn-primary" ng-click="addLineGraphLabel($index)">+</button>
 	    		<button class="btn btn-primary" ng-click="removeLineGraphLabel($index)" ng-hide="lineGraph.labels.length < 2">-</button>
 	    	</div>
-	    </p>
+	    </div>
 	</div>
 		<span class="input-group-btn">
         	<button class="btn btn-primary" ng-click="addSections()">+</button>
