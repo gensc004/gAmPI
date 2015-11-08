@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gAmPieApp')
-  .controller('TictactoeCtrl', function ($scope, socket, $http, Auth, $interval, $timeout) {
+  .controller('TictactoeCtrl', function ($rootScope, $scope, socket, $http, Auth, $interval, $timeout) {
   	console.log("Logged in? " + Auth.isLoggedIn());
     var test = Auth.isLoggedIn();
   	if (test){
@@ -28,6 +28,15 @@ angular.module('gAmPieApp')
    //      }
    //    }
     
+    window.onbeforeunload = function(e) {
+    	console.log(e)
+    	$scope.exitGame();
+    }
+    // $rootScope.$on('$locationChangeStart', function( event ) {
+    // 	console.log(event)
+    // 	$scope.exitGame();
+
+    // })
 
     $scope.joinGame = function(game) {
     	if (game.playerO && game.playerX) {
@@ -101,11 +110,11 @@ angular.module('gAmPieApp')
     $scope.updateTime = function() {
     	if ($scope.currentGame) {
     		if ($scope.currentGame.countingDown || $scope.currentGame.message == "The host left. Exiting...") {
-    		   	if ($scope.currentGame.timer > 0) 
+    		   	if ($scope.currentGame.timer > 1) 
     		   	{
     		   		$scope.currentGame.timer--;
     		   	}
-    		   	else if ($scope.currentGame.timer < 1)
+    		   	else if ($scope.currentGame.timer <= 1)
   			   	{
   			   		if ($scope.currentGame.message == "The host left. Exiting...")
   			   			$scope.exitGame();
@@ -175,6 +184,7 @@ angular.module('gAmPieApp')
     $scope.exitGame = function() {
     	if ($scope.currentGame.message == "The host left. Exiting..." && $scope.currentGame.timer > 0)
     	{
+    		$scope.currentGame.timer = 0;
     		return;
     	}
     	$scope.currentGame.countingDown = false;
@@ -258,12 +268,12 @@ angular.module('gAmPieApp')
 
   	$scope.resetTimer = function(currentGame)
   	{
-  		currentGame.timer = 60;
+  		currentGame.timer = 30;
   	}
 
   	$scope.updateStats = function(winner, loser) 
   	{
-  		$http.get('/api/customDataInstance/563ed3a7d0606e8165900c14').success(function(success) {
+  		$http.get('/api/customDataInstance/563f71216d4831f97f4e7b69').success(function(success) {
   			var data = success.payload.dataPoints;
   			var foundWinner = false;
   			var foundLoser = false;
@@ -284,14 +294,14 @@ angular.module('gAmPieApp')
   				}
   			}
   			if (!foundWinner) {
-  				data.push([{"Player": winner, "Wins": 1, "Losses": 0}]);
+  				data.push({"Player": winner, "Wins": 1, "Losses": 0});
   			
   			}
   			if (!foundLoser) {
-  				data.push([{"Player": loser, "Wins": 0, "Losses": 1}]);
+  				data.push({"Player": loser, "Wins": 0, "Losses": 1});
   				
   			}
-  			$http.put('/api/customDataInstance/563ed3a7d0606e8165900c14', {schemaId: success.payload.schemaId, dataPoints: data}).success(function(success)
+  			$http.put('/api/customDataInstance/563f71216d4831f97f4e7b69', {schemaId: success.payload.schemaId, dataPoints: data}).success(function(success)
   			{
   				console.log(success);
   			})
