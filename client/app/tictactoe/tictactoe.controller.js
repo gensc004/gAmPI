@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gAmPieApp')
-  .controller('TictactoeCtrl', function ($rootScope, $scope, socket, $http, Auth, $interval, $timeout) {
+  .controller('TictactoeCtrl', function ($rootScope, $scope, socket, $http, Auth, $interval) {
   	console.log("Logged in? " + Auth.isLoggedIn());
 
     Auth.isLoggedInAsync(function(isLoggedIn) {
@@ -37,9 +37,9 @@ angular.module('gAmPieApp')
     })
 
     $scope.joinGame = function(game) {
-    	if (game.playerO && game.playerX) {
+    	if (game.playerO && game.playerX && game.playerO._id != $scope.currentUser._id && game.playerX._id != $scope.currentUser._id) {
     		console.log('oops');
-    		alert("Can't join game! Already two players");
+    		alert("Can't join game! Already has two players");
     	}
     	else {
     	$scope.currentGame = game;
@@ -48,10 +48,11 @@ angular.module('gAmPieApp')
     	
     	if ($scope.currentGame.playerX && $scope.currentUser._id == $scope.currentGame.playerX._id)
     		$scope.currentGame.playerX = $scope.currentUser;
+    	else if ($scope.currentGame.playerO && $scope.currentUser._id == $scope.currentGame.playerO._id)
+    		$scope.currentGame.playerO = $scope.currentUser;
     	else if ($scope.currentGame.playerX && !$scope.currentGame.playerO)
     	{
     		$scope.currentGame.message = "It is player 1's turn";
-    		console.log("there is already a player 1, adding player 2...");
     		$scope.resetTimer($scope.currentGame);
     		$scope.currentGame.countingDown = true;
     		$scope.player = 'O';
@@ -61,7 +62,6 @@ angular.module('gAmPieApp')
     	//we might not need this later
     	else if (!$scope.currentGame.playerX)
     	{
-    		console.log("there are no players, adding player 1...")
     		$scope.resetTimer($scope.currentGame);
     		$scope.currentGame.countingDown = false;
     		$scope.player = 'X';
@@ -124,9 +124,8 @@ angular.module('gAmPieApp')
     }
 
     $scope.claimSquare = function(index) {
-    	if($scope.currentGame.isActive && $scope.currentGame.turn == $scope.player && $scope.currentGame.values[index] == '_') {
+    	if($scope.currentGame.isActive && $scope.currentGame.turn == $scope.player && $scope.currentGame.values[index] == " ") {
     		$scope.currentGame.values[index] = $scope.player;
-    		console.log("Checking: " + $scope.player + ", " + index + ", " + $scope.currentGame.values);
     		if ($scope.hasWon($scope.player, index, $scope.currentGame.values)) {
     			$scope.currentGame.countingDown = false;
     			$interval.cancel($scope.countdown);
@@ -170,7 +169,7 @@ angular.module('gAmPieApp')
     		playerX: $scope.currentUser,
     		playerO: null,
     		turn: 'X',
-    		values: ['_', '_', '_', '_', '_', '_', '_', '_', '_'],
+    		values: [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
     		game_id: id,
     		name: "Game " + id,
     		message: "Waiting for second player..."
@@ -190,6 +189,8 @@ angular.module('gAmPieApp')
     	$scope.currentGame.countingDown = false;
     	var temp;
     	console.log("PLAYERS(1): " + $scope.player + " " + $scope.currentGame.playerX + " " + $scope.currentGame.playerO);
+    	console.log($scope.currentGame.playerX);
+    	console.log($scope.currentGame.playerY);
     	if ($scope.player == 'X') {
     		if ($scope.currentGame.playerO) {
     			$scope.currentGame.message = "The host left. Exiting...";
@@ -201,7 +202,7 @@ angular.module('gAmPieApp')
 	    	$scope.currentGame.playerX = null;
 	    }
 	    else if ($scope.player == 'O') {
-    		$scope.currentGame.message = "Player 2 left"
+    		$scope.currentGame.message = "Player 2 left";
 	    	$scope.currentGame.playerO = null;
 	    }
 	    temp = $scope.currentGame;
@@ -209,6 +210,7 @@ angular.module('gAmPieApp')
 	    $http.put('/api/ticTacToeGame/' + temp._id, temp).success(function (success){
 	    	console.log(success);
 	    });
+	    console.log("PLAYER 1: " + temp.playerX + " PLAYER 2: " + temp.playerY);
 	    if (!temp.playerX && !temp.playerO) {
     		console.log("PLAYERS(2): " + temp.playerX + " " + temp.playerO);
 	    	$http.delete('/api/ticTacToeGame/' + temp._id);
@@ -264,7 +266,7 @@ angular.module('gAmPieApp')
   	$scope.randomMove = function()
   	{
   		var move = Math.floor(Math.random() * 9);
-  	  	while($scope.currentGame.values[move] != '_')
+  	  	while($scope.currentGame.values[move] != ' ')
        	{
         	move = Math.floor(Math.random() * 9);
         }
@@ -319,7 +321,7 @@ angular.module('gAmPieApp')
   	{
   		for (var i = 0; i < board.length; i++)
   		{
-  			if (board[i] == "_") 
+  			if (board[i] == " ") 
   			{
   				return false;
   			}

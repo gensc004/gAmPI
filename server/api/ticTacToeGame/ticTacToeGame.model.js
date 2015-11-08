@@ -21,7 +21,7 @@ var TicTacToeGameSchema = new Schema({
 TicTacToeGameSchema.statics.query = function query(q) {
 	var query = {};
 	if(q.gameId) {
-		query['_id'] = q.gameId
+		query['_id'] = q.gameId;
 	};
 	return this.find(query);
 }
