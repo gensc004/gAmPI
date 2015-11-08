@@ -34,6 +34,7 @@ angular.module('gAmPieApp')
 	  	 	$scope.dataSchemas.splice($scope.dataSchemas.length - 1, 1);
 	  	 }
 	  	 $scope.sendData = function(){
+	  	 	
 	  	 	console.log($scope.dataJSON);
 	  	 	$http.post("/api/customDataInstance", $scope.dataJSON).success(function(success) {
 	  	 		console.log(success)

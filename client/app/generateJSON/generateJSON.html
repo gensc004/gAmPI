@@ -7,6 +7,11 @@
   </div>
 </header>
 <div ng-if="genCategory">
+	<div class="col-sm-12">
+		<div class="col-sm-4">
+			<input type="text" class="form-control" placeholder="Name" ng-model="dataJSON.name">
+		</div>
+	</div>
 	<h2>[</h2>
 	<div ng-repeat="dataSchema in dataSchemas track by $index">
 		<form class="container">
@@ -35,8 +40,4 @@
 	</div>
 </div>
 
-<footer class="footer">
-  <div class="container">
-      <p>gAmPIe</p>
-  </div>
-</footer>
+<div ng-include="'components/footer/footer.html'"></div>

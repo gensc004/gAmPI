@@ -6,6 +6,7 @@ var ObjectIdSchema = Schema.ObjectId;
 var ObjectId = mongoose.Types.ObjectId;
 
 var CustomDataInstanceSchema = new Schema({
+  name: String,
   schemaId: ObjectIdSchema,
   dataPoints: Schema.Types.Mixed
 });
