@@ -7,5 +7,5 @@ angular.module('gAmPieApp')
         url: '/schemaMaker',
         templateUrl: 'app/schemaMaker/schemaMaker.html',
         controller: 'SchemaMakerCtrl'
-      });
+      })
   });

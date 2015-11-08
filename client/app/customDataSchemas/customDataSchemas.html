@@ -1,0 +1,146 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>gAmPIe</h1>
+    <p class="lead">Create your custom schema</p>
+  </div>
+</header>
+
+<div ng-repeat="schema in schemas" ng-click="goToInstance(schema.name)">
+	<div class="row">
+		<button type="button" class="btn btn-default btn-lg col-sm-10 edit-button" ng-click="schema.isViewing = !schema.isViewing; schema.isEditing = false; schema.isDeleting = false">{{schema.name}}</button>
+		<button type="button" class="btn btn-info btn-lg col-sm-1 edit-button" ng-disabled="schema.userId == currentUser._id" ng-click="schema.isEditing = !schema.isEditing; schema.isViewing = false; schema.isDeleting = false"><span class="glyphicon glyphicon-pencil"></span></button>
+		<button type="button" ng-disabled="schema.userId == currentUser._id" class="btn btn-warning btn-lg col-sm-1 edit-button" ng-click="schema.isDeleting = !schema.isDeleting; schema.isViewing = false; schema.isEditing = false"><span class="glyphicon glyphicon-trash"></span></button>
+	</div>
+
+	<div class="container showing-container" ng-show="schema.isViewing">
+		<div class="row">
+			<label class="form-label">Data Fields: </label>
+			<div ng-repeat="field in schema.dataSchema">
+				<div class="col-sm-6"> 
+					<input class="form-control col-sm-6"  ng-disabled="true"  type="text" ng-model="field.field">
+				</div>
+				<div class="col-sm-6"> 
+					<input class="form-control col-sm-6"  ng-disabled="true" type="text" ng-model="field.fieldType">
+				</div>
+
+			</div>
+
+			<label class="form-label">Visualizations: </label>
+			<div ng-repeat="vis in schema.visualizationSchema">
+				<label class="form-label">{{vis.visType}}: </label>
+				<div ng-if="vis.visType == 'list'" ng-repeat="section in vis.sections">
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" ng-disabled="true" type="text" ng-model="section.fieldName">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" ng-disabled="true" type="text" ng-model="section.style">
+					</div>
+				</div>
+				<div ng-if="vis.visType == 'line graph'">
+					<div class="col-sm-12">
+						<input class="form-control col-sm-6"  ng-disabled="true" type="text" ng-model="vis.title">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" ng-disabled="true" type="text" ng-model="vis.xAxis">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" ng-disabled="true" type="text" ng-model="vis.xAxisLabel">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" ng-disabled="true" type="text" ng-model="vis.yAxis">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" ng-disabled="true" type="text" ng-model="vis.yAxisLabel">
+					</div>
+				</div>
+			</div>
+
+
+			<label class="form-label">User Id: </label>
+			<input class="form-control" ng-disabled="true" type="text" ng-model="schema.userId">
+			<label class="form-label">Schema Id: </label>
+			<input class="form-control" ng-disabled="true" type="text" ng-model="schema.schemaId">
+
+
+		</div>
+	</div>
+
+	<div class="container showing-container" ng-show="schema.isEditing">
+		<div class="row">
+			{{schema}}
+			<label class="form-label">Data Fields: </label>
+			<div ng-repeat="field in schema.dataSchema">
+				<div class="col-sm-6"> 
+					<input class="form-control col-sm-6" type="text" ng-model="field.field">
+				</div>
+				<div class="col-sm-6"> 
+					<input class="form-control col-sm-6" type="text" ng-model="field.fieldType">
+				</div>
+			</div>
+
+			<label class="form-label">Visualizations: </label>
+			<div ng-repeat="vis in schema.visualizationSchema">
+				<label ng-if="vis.visType == 'list'"  class="form-label">{{vis.visType}}: </label>
+				<div class="row" ng-if="vis.visType == 'list'" ng-repeat="section in vis.sections">
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" type="text" ng-model="section.fieldName">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" type="text" ng-model="section.style">
+					</div>
+					<button ng-show="$last" class="btn btn-success pull-right finish-editing add-vis" ng-click="addField($parent.$parent.$parent.$index, $parent.$parent.$index, $index)">Add Field</button>
+					<button ng-show="$last && $index > 0" class="btn btn-warning pull-right finish-editing add-vis" ng-click="deleteField($parent.$parent.$parent.$index, $parent.$parent.$index, $index)">Remove Field</button>
+
+				</div>
+				<button ng-show="$last && vis.visType == 'list'" class="btn btn-success pull-right finish-editing add-vis" ng-click="addList($parent.$index, $index)">Add List</button>
+				<button ng-show="$last && vis.visType == 'list' && $index > 0" class="btn btn-warning pull-right finish-editing add-vis" ng-click="deleteList($parent.$index, $index)">Delete List</button>
+			</div>
+
+			<div ng-repeat="vis in schema.visualizationSchema">
+				
+				<label ng-if="vis.visType == 'line graph'"  class="form-label">{{vis.visType}}: </label>
+				<div ng-if="vis.visType == 'line graph'">
+					<div class="col-sm-12">
+						<input class="form-control col-sm-6" type="text" ng-model="vis.title">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" type="text" ng-model="vis.xAxis">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" type="text" ng-model="vis.xAxisLabel">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" type="text" ng-model="vis.yAxis">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" type="text" ng-model="vis.yAxisLabel">
+					</div>
+				</div>
+				
+
+				<button ng-show="$last && vis.visType == 'line graph'" class="btn btn-success pull-right add-vis" ng-click="addGraph($parent.$index, $index)">Add Graph</button>
+				<button ng-show="$last && vis.visType == 'line graph' && $index > 0" class="btn btn-warning pull-right add-vis" ng-click="deleteGraph($parent.$index, $index)">Delete Graph</button>
+			</div>
+			
+
+
+			<label class="form-label">User Id: </label>
+			<input class="form-control" ng-disabled="true" type="text" ng-model="schema.userId">
+			<label class="form-label">Schema Id: </label>
+			<input class="form-control" ng-disabled="true" type="text" ng-model="schema.schemaId">
+			<button class="btn btn-success pull-right finish-editing" ng-click="finishEditing(schema)">Finish Editing</button>
+
+		</div>
+	</div>
+	<div class="container showing-container" ng-show="schema.isDeleting">
+		<div class="row">
+			<h2 class="col-sm-8">Are you sure you want to delete???</h2>
+			<button class="btn btn-danger col-sm-4 delete-button" ng-click="deleteSchema(schema)">Yes</button>
+		</div>
+	</div>
+</div>
+
+
+<div ng-include="'components/footer/footer.html'"></div>
