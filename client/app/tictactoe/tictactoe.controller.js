@@ -304,7 +304,7 @@ angular.module('gAmPieApp')
 
   	$scope.updateStats = function(winner, loser) 
   	{
-  		$http.get('/api/customDataInstance/563f71216d4831f97f4e7b69').success(function(success) {
+  		$http.get('/api/customDataInstance/563fcb9bd54f01f0006bf9aa').success(function(success) {
   			var data = success.payload.dataPoints;
   			var foundWinner = false;
   			var foundLoser = false;
@@ -332,7 +332,7 @@ angular.module('gAmPieApp')
   				data.push({"Player": loser, "Wins": 0, "Losses": 1});
   				
   			}
-  			$http.put('/api/customDataInstance/563f71216d4831f97f4e7b69', {schemaId: success.payload.schemaId, dataPoints: data}).success(function(success)
+  			$http.put('/api/customDataInstance/563fcb9bd54f01f0006bf9aa', {schemaId: success.payload.schemaId, dataPoints: data}).success(function(success)
   			{
   				console.log(success);
   			})

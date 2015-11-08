@@ -134,6 +134,8 @@
 			<input class="form-control" ng-disabled="true" type="text" ng-model="schema.schemaId">
 			<button class="btn btn-success pull-right finish-editing" ng-click="finishEditing(schema)">Finish Editing</button>
 
+			<button ng-show="successfulCreation" class="btn btn-success finish-editing col-sm-12" ng-click="goToDataGeneration()">Generate some data!</button>
+
 		</div>
 	</div>
 	<div class="container showing-container" ng-show="schema.isDeleting">

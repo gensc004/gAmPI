@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gAmPieApp')
-  .controller('SchemaMakerCtrl', function ($scope, $http, Auth) {
+  .controller('SchemaMakerCtrl', function ($scope, $http, Auth, $state) {
   	var currentUser = Auth.getCurrentUser();
 
     Auth.isLoggedInAsync(function(isLoggedIn) {
@@ -138,7 +138,12 @@ angular.module('gAmPieApp')
 
     	}
 
-    	$http.post("/api/customDataSchema", toReturn).success(function(success){console.log(success)});
+    	$http.post("/api/customDataSchema", toReturn).success(function(success){
+            $scope.successfulCreation = true;
+            console.log(success)
+        });
     }
-
+    $scope.goToDataGeneration = function() {
+        $state.go('generateJSON');
+    }
   });
