@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gAmPieApp')
-  .controller('LoginCtrl', function ($scope, Auth, $location) {
+  .controller('LoginCtrl', function ($scope, Auth, $location, $stateParams) {
     $scope.user = {};
     $scope.errors = {};
 
@@ -15,7 +15,12 @@ angular.module('gAmPieApp')
         })
         .then( function() {
           // Logged in, redirect to home
-          $location.path('/');
+          if($stateParams.next) {
+            $location.path('/' + $stateParams.next);
+          }else{
+            $location.path('/');
+          }
+          
         })
         .catch( function(err) {
           $scope.errors.other = err.message;

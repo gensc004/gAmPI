@@ -1,21 +1,40 @@
 'use strict';
 
 angular.module('gAmPieApp')
-  .controller('TictactoeCtrl', function ($scope, socket, $http, Auth, $interval, $timeout) {
+  .controller('TictactoeCtrl', function ($rootScope, $scope, socket, $http, Auth, $interval, $timeout) {
   	console.log("Logged in? " + Auth.isLoggedIn());
-  	console.log(Auth.getCurrentUser());
-    var test = Auth.isLoggedIn();
-  	if (test){
-  		
-  	} else {
-      console.log(Auth);
-      //window.location.href = '/login';
-    }
+
+    Auth.isLoggedInAsync(function(isLoggedIn) {
+      if(!isLoggedIn) {
+        window.location.href = '/login/tictactoe';
+      }
+    })
+
   	$scope.currentUser = Auth.getCurrentUser();
-  	console.log($scope.currentUser);
-  	$scope.player = 'X';
-  	$scope.countingDown = false;
+   //  var notResolved = true
+   //  while(notResolved) {
+   //    console.log($scope.currentUser.$resolved)
+   //    if($scope.currentUser.$resolved == true) {
+   //      notResolved = false;
+   //      if(!$scope.currentUser._id) {
+   //        window.location.href = '/login';
+   //      }
+   //    }
+    $scope.currentUser = Auth.getCurrentUser();
+    console.log($scope.currentUser);
+    $scope.player = 'X';
+    $scope.countingDown = false;
     
+    window.onbeforeunload = function(e) {
+    	console.log(e)
+    	$scope.exitGame();
+    }
+
+    $rootScope.$on('$locationChangeStart', function( event ) {
+    	console.log(event)
+    	$scope.exitGame();
+
+    })
 
     $scope.joinGame = function(game) {
     	if (game.playerO && game.playerX) {
@@ -89,11 +108,11 @@ angular.module('gAmPieApp')
     $scope.updateTime = function() {
     	if ($scope.currentGame) {
     		if ($scope.currentGame.countingDown || $scope.currentGame.message == "The host left. Exiting...") {
-    		   	if ($scope.currentGame.timer > 0) 
+    		   	if ($scope.currentGame.timer > 1) 
     		   	{
     		   		$scope.currentGame.timer--;
     		   	}
-    		   	else if ($scope.currentGame.timer < 1)
+    		   	else if ($scope.currentGame.timer <= 1)
   			   	{
   			   		if ($scope.currentGame.message == "The host left. Exiting...")
   			   			$scope.exitGame();
@@ -145,13 +164,15 @@ angular.module('gAmPieApp')
     }
 
     $scope.createGame = function() {
+    	var id = $scope.getName();
     	var newGame = {
     		isActive: false,
     		playerX: $scope.currentUser,
     		playerO: null,
     		turn: 'X',
     		values: ['_', '_', '_', '_', '_', '_', '_', '_', '_'],
-    		name: $scope.getName(),
+    		game_id: id,
+    		name: "Game " + id,
     		message: "Waiting for second player..."
     	};
     	$http.post('/api/ticTacToeGame', newGame).success(function(success) {
@@ -163,6 +184,7 @@ angular.module('gAmPieApp')
     $scope.exitGame = function() {
     	if ($scope.currentGame.message == "The host left. Exiting..." && $scope.currentGame.timer > 0)
     	{
+    		$scope.currentGame.timer = 0;
     		return;
     	}
     	$scope.currentGame.countingDown = false;
@@ -193,7 +215,7 @@ angular.module('gAmPieApp')
 
     $scope.filterFn = function(game)
   	{
-  		return !game.playerO;
+  		return !game.playerO && game.playerX;
   	}
 
   	$scope.getName = function()
@@ -202,7 +224,7 @@ angular.module('gAmPieApp')
   			return 1;
   		}
   		else {
-  			return $scope.games[$scope.games.length - 1].name + 1;
+  			return $scope.games[$scope.games.length - 1].game_id + 1;
   		}
   	}
 
@@ -246,12 +268,12 @@ angular.module('gAmPieApp')
 
   	$scope.resetTimer = function(currentGame)
   	{
-  		currentGame.timer = 60;
+  		currentGame.timer = 30;
   	}
 
   	$scope.updateStats = function(winner, loser) 
   	{
-  		$http.get('/api/customDataInstance/563ed3a7d0606e8165900c14').success(function(success) {
+  		$http.get('/api/customDataInstance/563f71216d4831f97f4e7b69').success(function(success) {
   			var data = success.payload.dataPoints;
   			var foundWinner = false;
   			var foundLoser = false;
@@ -272,14 +294,14 @@ angular.module('gAmPieApp')
   				}
   			}
   			if (!foundWinner) {
-  				data.push([{"Player": winner, "Wins": 1, "Losses": 0}]);
+  				data.push({"Player": winner, "Wins": 1, "Losses": 0});
   			
   			}
   			if (!foundLoser) {
-  				data.push([{"Player": loser, "Wins": 0, "Losses": 1}]);
+  				data.push({"Player": loser, "Wins": 0, "Losses": 1});
   				
   			}
-  			$http.put('/api/customDataInstance/563ed3a7d0606e8165900c14', {schemaId: success.payload.schemaId, dataPoints: data}).success(function(success)
+  			$http.put('/api/customDataInstance/563f71216d4831f97f4e7b69', {schemaId: success.payload.schemaId, dataPoints: data}).success(function(success)
   			{
   				console.log(success);
   			})
