@@ -12,14 +12,20 @@
 			<button ng-if="instance.name" type="button" class="btn btn-default btn-lg btn-block">{{instance.name}}</button>
 			<button ng-if="!instance.name" type="button" class="btn btn-default btn-lg btn-block">{{instance._id}}</button>
 		</div>
-		<div ng-repeat="vis in schema.visualizationSchema">
-			<div ng-if="vis.visType == 'list'">
-				<div ng-repeat="dataPoint in instance.dataPoints" ng-hide="instance.showList != true">
-					<div ng-repeat="field in vis.sections">
-						{{field.fieldName}}
-						<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
-					</div>
-				</div>
+		<div class="container separate" ng-repeat="vis in schema.visualizationSchema">
+			<div class="span3 offset2" ng-if="vis.visType == 'list'" ng-hide="instance.showList != true">
+				<table class="table table-bordered">
+					<tr>
+						<th ng-repeat="field in vis.sections">
+							{{field.fieldName}}
+						</th>
+					</tr>
+					<tr ng-repeat="dataPoint in instance.dataPoints">
+						<td ng-repeat="field in vis.sections">
+							<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
+						</td>
+					</tr>
+				</table>
 			</div>
 		
 			<div ng-if="vis.visType == 'line graph'">
