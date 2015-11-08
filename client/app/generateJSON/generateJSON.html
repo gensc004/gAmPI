@@ -6,21 +6,38 @@
     <p class="lead">generate game data</p>
   </div>
 </header>
-<form class="container">
-	<h3>{</h3>
-	<div ng-repeat="field in dataSchema">
-		<div class="container">
-			<label class= "control-label col-sm-1">{{field.field}}:</label>
-			<div class="col-sm-3">
-				<input type="text" class="form-control" placeholder="{{field.fieldType}}" ng-model="dataJSON.dataPoints[0][field.field]"></input>
-			</div>
+<div ng-if="genCategory">
+	<div class="col-sm-12">
+		<div class="col-sm-4">
+			<input type="text" class="form-control" placeholder="Name" ng-model="dataJSON.name">
 		</div>
 	</div>
-	<h3>}</h3>
-</form>
-<button class="btn btn-success" ng-click="sendData()">Send Data</button>
-<footer class="footer">
-  <div class="container">
-      <p>gAmPIe</p>
-  </div>
-</footer>
+	<h2>[</h2>
+	<div ng-repeat="dataSchema in dataSchemas track by $index">
+		<form class="container">
+			<h3>{</h3>
+			
+				<div ng-repeat="field in dataSchema">
+					<div class="container">
+						<label class= "control-label col-sm-1">{{field.field}}:</label>
+						<div class="col-sm-3">
+							<input type="text" class="form-control" placeholder="{{field.fieldType}}" ng-model="dataJSON.dataPoints[$parent.$index][field.field]"></input>
+
+						</div>
+					</div>
+				</div>
+			
+			<h3>}</h3>
+			<button class="btn btn-success" ng-click="addDataSchema()" ng-show="$last">+</button>
+		</form>
+	</div>
+	<h2>]</h2>
+	<button class="btn btn-success" ng-click="sendData()">Send Data</button>
+</div>
+<div ng-hide="genCategory">
+	<div ng-repeat="schema in schemas" ng-click="goToInstance(schema.name)">
+		<button type="button" class="btn btn-default btn-lg btn-block"> {{schema.name}}</button>
+	</div>
+</div>
+
+<div ng-include="'components/footer/footer.html'"></div>

@@ -12,7 +12,9 @@ var TicTacToeGameSchema = new Schema({
   playerO: Schema.Types.Mixed,
   turn: String,
   values: [String],
-  winner: String
+  winner: String,
+  timer: Number,
+  countingDown: Boolean
 });
 
 TicTacToeGameSchema.statics.query = function query(q) {
@@ -22,5 +24,12 @@ TicTacToeGameSchema.statics.query = function query(q) {
 	};
 	return this.find(query);
 }
+
+TicTacToeGameSchema.pre('save', function(next) {
+  this.markModified('playerX');
+  this.markModified('playerO');
+  this.markModified('values');
+  next();
+})
 
 module.exports = mongoose.model('TicTacToeGame', TicTacToeGameSchema);

@@ -38,10 +38,22 @@ angular.module('gAmPieApp')
           var oldItem = _.find(array, {_id: item._id});
           var index = array.indexOf(oldItem);
           var event = 'created';
+          
 
           // replace oldItem if it exists
           // otherwise just add item to the collection
           if (oldItem) {
+            if(modelName == 'customDataInstance') {
+              if(oldItem.showGraph == false || oldItem.showGraph == true) {
+                item.showGraph = oldItem.showGraph;
+              }
+            }
+
+            if(modelName == 'customDataInstance') {
+              if(oldItem.showList == false || oldItem.showList == true) {
+                item.showList = oldItem.showList;
+              }
+            }
             array.splice(index, 1, item);
             event = 'updated';
           } else {
@@ -60,7 +72,6 @@ angular.module('gAmPieApp')
           cb(event, item, array);
         });
       },
-
       /**
        * Removes listeners for a models updates on the socket
        *
