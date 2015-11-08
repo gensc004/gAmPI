@@ -2,13 +2,13 @@
 
 angular.module('gAmPieApp')
   .controller('TictactoeCtrl', function ($scope, socket, $http, Auth) {
+  	if (!Auth.isLoggedIn()){
+  		window.location.href = '/login';
+  	}
   	$scope.currentUser = Auth.getCurrentUser();
   	console.log($scope.currentUser);
   	$scope.player = 'X';
   	$scope.countingDown = false;
-  	$scope.message="";
-
-
 
     $scope.interval = setInterval(function(){
         if ($scope.timeRemaining > 0 && $scope.countingDown) 
@@ -23,19 +23,25 @@ angular.module('gAmPieApp')
     	$scope.currentGame = game;
     	$scope.values = $scope.currentGame.values;
     	console.log($scope.currentGame.playerX);
-    	if ($scope.currentGame.playerX)
+    	if ($scope.currentGame.playerX && !$scope.currentGame.playerO)
     	{
-    		console.log("there is already a player 1, adding player 2...")
+    		$scope.currentGame.message = "It is player 1's turn";
+    		console.log("there is already a player 1, adding player 2...");
     		$scope.timeRemaining = 60;
     		$scope.countingDown = true;
     		$scope.player = 'O';
     		$scope.currentGame.isActive = true;
     		$scope.currentGame.playerO = $scope.currentUser;
     	}
+    	//else if ($scope.currentGame.playerO)
+    	//{
+    	//	console.log('oops')
+    	//	alert("Can't join game! Already two players");
+    	//}
     	//we might not need this later
-    	else 
+    	else if (!$scope.currentGame.playerO)
     	{
-    		console.log("there is no players, adding player 1...")
+    		console.log("there are no players, adding player 1...")
     		$scope.timeRemaining = 60;
     		$scope.countingDown = false;
     		$scope.player = 'X';
@@ -56,12 +62,19 @@ angular.module('gAmPieApp')
     });
 
     $scope.claimSquare = function(index) {
-    	if($scope.currentGame.turn == $scope.player) {
+    	if($scope.currentGame.turn == $scope.player && $scope.currentGame.values[index] == '_') {
     		$scope.currentGame.values[index] = $scope.player;
-    		if($scope.player == 'X') {
+    		console.log("Checking: " + $scope.player + ", " + index + ", " + $scope.currentGame.values);
+    		if ($scope.hasWon($scope.player, index, $scope.currentGame.values)) {
+    			$scope.currentGame.message = "Player " + $scope.player + " wins!"
+    		}
+    		else if($scope.player == 'X') {
     			$scope.currentGame.turn = 'O'
-    		} else {
+    			$scope.currentGame.message = "It is player 2's turn";
+    		} 
+    		else {
     			$scope.currentGame.turn = 'X'
+    			$scope.currentGame.message = "It is player 1's turn";
     		}
     		$scope.timeRemaining = 60;
 	    	$http.put('/api/ticTacToeGame/' + $scope.currentGame._id, $scope.currentGame);
@@ -74,9 +87,10 @@ angular.module('gAmPieApp')
     		playerX: $scope.currentUser,
     		playerO: null,
     		turn: 'X',
-    		values: ['_', '_', '_', '_', '_', '_', '_', '_', '_']
+    		values: ['_', '_', '_', '_', '_', '_', '_', '_', '_'],
+    		name: $scope.getName(),
+    		message: "Waiting for second player..."
     	};
-    	$scope.message = "Waiting for second player...";
     	$http.post('/api/ticTacToeGame', newGame).success(function(success) {
     		$scope.currentGame = success.payload;
     		console.log($scope.currentGame);
@@ -94,5 +108,108 @@ angular.module('gAmPieApp')
     $scope.filterFn = function(game)
   	{
   		return !game.playerO;
+  	}
+
+  	$scope.getName = function()
+  	{
+  		if($scope.games.length < 1) {
+  			return 1;
+  		}
+  		else {
+  			return $scope.games[$scope.games.length - 1].name + 1;
+  		}
+  	}
+
+  	$scope.hasWon = function(player, move, board)
+  	{
+  		console.log(player + ", " + move + ", " + board);
+  		if (move == 0) {
+  			if (board[1] == player && board[2] == player) {
+  				return true;
+  			}
+  			else if (board[3] == player && board[6] == player) {
+  				return true;
+  			}
+  			else if (board[4] == player && board[8] == player) {
+  				return true;
+  			}
+  		}
+  		else if (move == 1) {
+  			if (board[0] == player && board[2] == player) {
+  				return true;
+  			}
+  			else if (board[4] == player && board[7] == player) {
+  				return true;
+  			}
+  		}
+  		else if (move == 2) {
+  			if (board[0] == player && board[1] == player) {
+  				return true;
+  			}
+  			else if (board[4] == player && board[6] == player) {
+  				return true;
+  			}
+  			else if (board[5] == player && board[8] == player) {
+  				return true;
+  			}
+  		}
+  		else if (move == 3) {
+  			if (board[4] == player && board[5] == player) {
+  				return true;
+  			}
+  			else if (board[0] == player && board[6] == player) {
+  				return true;
+  			}
+  		}
+  		else if (move == 4) {
+  			if (board[0] == player && board[8] == player) {
+  				return true;
+  			}
+  			else if (board[1] == player && board[7] == player) {
+  				return true;
+  			}
+  			else if (board[2] == player && board[6] == player) {
+  				return true;
+  			}
+  			else if (board[5] == player && board[3] == player) {
+  				return true;
+  			}
+  		}
+  		else if (move == 5) {
+  			if (board[2] == player && board[8] == player) {
+  				return true;
+  			}
+  			else if (board[3] == player && board[4] == player) {
+  				return true;
+  			}
+  		}
+  		else if (move == 6) {
+  			if (board[0] == player && board[3] == player) {
+  				return true;
+  			}
+  			else if (board[7] == player && board[8] == player) {
+  				return true;
+  			}
+  		}
+  		else if (move == 7) {
+  			if (board[1] == player && board[4] == player) {
+  				return true;
+  			}
+  			else if (board[6] == player && board[8] == player) {
+  				return true;
+  			}
+  		}
+  		else if (move == 8) {
+  			if (board[0] == player && board[4] == player) {
+  				return true;
+  			}
+  			else if (board[6] == player && board[7] == player) {
+  				return true;
+  			}
+  			else if (board[2] == player && board[5] == player) {
+  				return true;
+  			}
+  		}
+  		return false;
   	}
   });
