@@ -3,6 +3,7 @@
 angular.module('gAmPieApp')
   .controller('TictactoeCtrl', function ($scope, socket, $http, Auth, $interval, $timeout) {
   	console.log("Logged in? " + Auth.isLoggedIn());
+  	console.log($scope.getCurrentUser);
   	if (!Auth.isLoggedIn()){
   		window.location.href = '/login';
   	}
