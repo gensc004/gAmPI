@@ -14,8 +14,8 @@
 		</span>
 		<span class="container col-md-4 text-center">
 			<div>
-			<h1 style="margin-top:0px; margin-bottom:30px">Tic-Tac-Toe</h1>
-			<h3 style="margin-top:10px;">{{currentGame.name}}: </h3>
+			<h1 style="margin-bottom:30px">Tic-Tac-Toe</h1>
+			<h3 class="game-title" style="margin-top:10px;" title="Click to change the name of this match!" ng-click="changeGameName(currentGame.name)">"{{currentGame.name}}": </h3>
 			<br/>
 			TIME REMAINING: {{currentGame.timer}}
 			<br/>

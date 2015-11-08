@@ -8,6 +8,9 @@
 	background-color:lightblue;
 	text-color:white;
 }
+.game-title:hover {
+	text-decoration:underline;
+}
 #board {
 	min-width: 150%;
 	transform:translateX(-16.5%);

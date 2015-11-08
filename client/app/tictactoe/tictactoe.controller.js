@@ -77,14 +77,14 @@ angular.module('gAmPieApp')
     $http.get('/api/ticTacToeGame').success(function(success) {
     	$scope.games = success.payload;
     	if ($scope.openGames($scope.games) == 0) {
-  			$scope.lobbyMessage = "There are no games with open spots. Start a new one!"
+  			$scope.lobbyMessage = "There are no open games. Start a new one!"
     	}
     	else {
     		$scope.lobbyMessage = "Click on a game to join it!"
     	}
     	socket.syncUpdates('ticTacToeGame', $scope.games, function(event, item, array) {
     		if ($scope.openGames($scope.games) == 0) {
-  				$scope.lobbyMessage = "There are no games with open spots. Start a new one!"
+  				$scope.lobbyMessage = "There are no open games. Start a new one!"
     		}
     		else {
     			$scope.lobbyMessage = "Click on a game to join it!"
@@ -276,6 +276,19 @@ angular.module('gAmPieApp')
   	$scope.resetTimer = function(currentGame)
   	{
   		currentGame.timer = 30;
+  	}
+
+  	$scope.changeGameName = function(origName) 
+  	{
+  		var newName = prompt("Enter a new name for this match: ", origName);
+  		if (newName)
+  		{
+  			$scope.currentGame.name = newName;
+
+    		$http.put('/api/ticTacToeGame/' + $scope.currentGame._id, $scope.currentGame).success(function(success) {
+    			console.log(success)
+    		});
+  		}
   	}
 
   	$scope.updateStats = function(winner, loser) 
