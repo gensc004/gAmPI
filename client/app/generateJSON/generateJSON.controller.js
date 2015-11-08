@@ -38,8 +38,13 @@ angular.module('gAmPieApp')
 	  	 	console.log($scope.dataJSON);
 	  	 	$http.post("/api/customDataInstance", $scope.dataJSON).success(function(success) {
 	  	 		console.log(success)
+	  	 		$scope.successfulCreation = true;
 	  	 	})
 	  	 }
+
+	  	 $scope.goToDataGeneration = function() {
+		        $state.go('visualize');
+		    }
 	} else {
 		$http.get('/api/customDataSchema').success(function(success) {
 			$scope.schemas = success.payload;

@@ -9,7 +9,8 @@
 </header>
 
 
-<section class="section-row">
+
+<section class="section-row" ng-hide="showTutorial">
   <div class="container">
     <div class="col-md-6"> 
       <h2>An API tool for any game</h2>
@@ -20,7 +21,7 @@
   </div>
 </section>
 
-<section class="section-row">
+<section class="section-row" ng-hide="showTutorial">
   <div class="container">
   <div class="col-md-6 section-pic"> pic </div>
     <div class="col-md-6"> 
@@ -31,7 +32,7 @@
   </div>
 </section>
 
-<section class="section-row">
+<section class="section-row" ng-hide="showTutorial">
   <div class="container">
     <div class="col-md-6"> 
       <h2>For Gamers</h2>
@@ -39,6 +40,17 @@
       </p>
     </div>
     <div class="col-md-6 section-pic"> pic </div>
+  </div>
+</section>
+
+<section class="section-row" ng-show="showTutorial">
+  <div class="container">
+    <div class="col-md-12"> 
+      <h2>How to use:</h2>
+      <p>Gampie is a tool to store any game match results of your video game and automatially wrap an API around that data. Track anything from team kills to gold collected. It is perfect to serve everyone your video game data.
+      </p>
+    </div>
+    <!-- <div class="col-md-6 section-pic"> pic </div> -->
   </div>
 </section>
 

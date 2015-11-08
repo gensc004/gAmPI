@@ -1,9 +1,9 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<header class="hero-unit" id="banner">
+<header class="hero-unit" style="padding-top: 70px" id="banner">
   <div class="container">
-    <h1>gAmPIe</h1>
-    <p class="lead">generate game data</p>
+    <h1>Data Generator</h1>
+    <p class="lead">Generate data for any schema</p>
   </div>
 </header>
 <div ng-if="genCategory">
@@ -33,6 +33,7 @@
 	</div>
 	<h2>]</h2>
 	<button class="btn btn-success" ng-click="sendData()">Send Data</button>
+	<div ng-show="successfulCreation" class="alert alert-success col-sm-12" role="alert" ng-click="goToDataGeneration()"><b>You successfully created a custom instance of data! Click me to view it in a neat way!</b></div>
 </div>
 <div ng-hide="genCategory">
 	<div ng-repeat="schema in schemas" ng-click="goToInstance(schema.name)">

@@ -1,6 +1,6 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<div class="dodgeHeader">
+<div class="dodge-header">
 </div>
 
 <div>
@@ -14,28 +14,30 @@
 		</span>
 		<span class="container col-md-4 text-center">
 			<div>
-			<h1 style="margin-top:0px; margin-bottom:30px">Tic-Tac-Toe</h1>
-			<h3 style="margin-top:10px;">{{currentGame.name}}: </h3>
+			<h1 style="margin-bottom:30px">Tic-Tac-Toe</h1>
+			<h3 class="game-title" style="margin-top:10px;" title="Click to change the name of this match!" ng-click="changeGameName(currentGame.name)">"{{currentGame.name}}": </h3>
 			<br/>
 			TIME REMAINING: {{currentGame.timer}}
 			<br/>
 			{{currentGame.message}}
 			</div>
-			<span> 
-				<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(0)" >{{currentGame.values[0]}}</button>
-				<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(1)" >{{currentGame.values[1]}}</button>
-				<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(2)" >{{currentGame.values[2]}}</button>
-			</span> <br>
-			<span>
-				<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(3)" >{{currentGame.values[3]}}</button>
-				<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(4)" >{{currentGame.values[4]}}</button>
-				<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(5)" >{{currentGame.values[5]}}</button>
-			</span> <br>
-			<span>
-				<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(6)" >{{currentGame.values[6]}}</button>
-				<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(7)" >{{currentGame.values[7]}}</button>
-				<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(8)" >{{currentGame.values[8]}}</button>
-			</span>
+			<div id="board" style="text-alight: center">
+				<span> 
+					<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(0)" >{{currentGame.values[0]}}</button>
+					<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(1)" >{{currentGame.values[1]}}</button>
+					<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(2)" >{{currentGame.values[2]}}</button>
+				</span> <br>
+				<span>
+					<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(3)" >{{currentGame.values[3]}}</button>
+					<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(4)" >{{currentGame.values[4]}}</button>
+					<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(5)" >{{currentGame.values[5]}}</button>
+				</span> <br>
+				<span>
+					<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(6)" >{{currentGame.values[6]}}</button>
+					<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(7)" >{{currentGame.values[7]}}</button>
+					<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(8)" >{{currentGame.values[8]}}</button>
+				</span>
+			</div>
 		</span>
 		<span class="container col-sm-4" ng-model="currentGame" style="margin-top:175px;">
 			<p style="text-align:left;">Player 2: <br/>
@@ -45,9 +47,10 @@
 	<div class="container" ng-model="lobbyMessage" ng-hide="currentGame != null">
 		<h1>Tic-Tac-Toe: Lobby</h1>
 		<h3 style="margin-bottom:15px"> {{lobbyMessage}} </h3>
-		<table class="table  table-hover">
+		<table class="table">
 			<tr class="game-list" ng-click="joinGame(game)" ng-repeat="game in games"> <!-- | filter:filterFn-->
 				<td>{{game.name}}</td>       
+				<td class="text-center"> {{game.message}} </td>
 				<td class="text-right">Host: {{game.playerX.name}}</td>
 			</tr>
 		</table>
@@ -55,4 +58,4 @@
 			<span class="glyphicon glyphicon-plus"></span>  CREATE GAME</button>
 	</div>
 </div>
-<div ng-include="'components/footer/footer.html'"></div>
+<div style="margin-top:40em" ng-include="'components/footer/footer.html'"></div>

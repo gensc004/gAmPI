@@ -1,85 +1,91 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<header class="hero-unit" id="banner">
+<header class="hero-unit" style="padding-top: 70px" id="banner">
   <div class="container">
-    <h1>gAmPIe</h1>
-    <p class="lead">Create your custom schema</p>
+    <h1>Schema Maker</h1>
+    <p class="lead">Make your custom schema</p>
   </div>
 </header>
 
-<div class="container">
-  <div class="form-group">
-  		<label>Game Name:</label>
-  		<input type="text" class="form-control" placeholder="game name" ng-model="schemaName">
-  </div>
-  <form class="thing-form">
-    <label>Fields</label>
-    <div class="form-inline">
-    	<div ng-repeat="field in numFields" class="form-inline">
-      		<input type="text" class="form-control" placeholder="field name" ng-model="numFields[$index].field"> : 
-      		<!--<input type="text" class="form-control" placeholder="field type" ng-model="numFields[$index].fieldType">-->
-      		<select ng-model="numFields[$index].fieldType" class="form-control">
-      			<option value="string">String</option>
-      			<option value="number">Number</option>
-      			<option value="array">Date</option>
-      		</select>
-      	</div>
-      <span class="input-group-btn">
-        <button class="btn btn-primary" ng-click="addField()">+</button>
-        <button class="btn btn-primary" ng-click="removeField()" ng-hide="numFields.length < 2">-</button>
-      </span>
-    </div>
-  </form>
+<div class="container showing-container">
+		<div class="row">
+			<div>
+				<label class="form-label">Name: </label>
+				<div class="col-sm-12"> 
+					<input class="form-control col-sm-12" type="text" placeholder="Schema Name" ng-model="schema.name">
+				</div>
+			</div>
 
-  <form class="thing-form">
-    
-    <div class="container row">
-	    <button class="btn btn-info" ng-click="addList()">List</button>
-	    <button class="btn btn-info" ng-click="addLineGraph()">Line Graph</button>
-	</div>
-	<div ng-repeat="list in lists">
-		<label class="col-sm-12">Visuals</label>
-	    <div>
-		    <div class="form-inline">
-		    	<div ng-repeat="section in list.sections" class="form-inline">
-		      		<!--<input type="text" class="form-control" placeholder="section name" ng-model="sections[$index].style"> -->
-		      		<select ng-model="section.style" class="form-control">
-		      			<option value="Title">Title</option>
-		      			<option value="Property">Property</option>
-		      			<option value="Property-bold">Property-bold</option>
-		      		</select>: 
-		      		<input type="text" class="form-control" placeholder="field name" ng-model="section.fieldName">
-		      	</div>
-		      <span class="input-group-btn">
-		        <button class="btn btn-primary" ng-click="addSection($index)">+</button>
-		        <button class="btn btn-primary" ng-click="removeSection($index)" ng-hide="list.sections.length < 2">-</button>
-		      </span>
-		    </div>
+			<label class="form-label">Data Fields: </label>
+			<div ng-repeat="field in schema.dataSchema">
+				<div class="col-sm-6"> 
+					<input class="form-control col-sm-6" type="text" placeholder="Field Name" ng-model="field.field">
+				</div>
+				<div class="col-sm-6"> 
+					<input class="form-control col-sm-6" type="text" placeholder="Field Type" ng-model="field.fieldType">
+				</div>
+				
+			</div>
+			<button class="btn btn-success pull-right" ng-click="addDataField()">Add Data Field</button>
+			<button ng-show="schema.dataSchema.length > 1" class="btn btn-warning pull-right" ng-click="deleteDataField()">Delete Data Field</button>
+
+			<div>
+				<label class="form-label">Visualizations: </label>
+				<div ng-repeat="vis in schema.visualizationSchema">
+					<label ng-if="vis.visType == 'list'"  class="form-label">{{vis.visType}}: </label>
+					<div class="row" ng-if="vis.visType == 'list'" ng-repeat="section in vis.sections">
+						<div class="col-sm-6"> 
+							<input class="form-control col-sm-6" type="text" placeholder="Section Name" ng-model="section.fieldName">
+						</div>
+						<div class="col-sm-6"> 
+							<input class="form-control col-sm-6" type="text" placeholder="Section Style" ng-model="section.style">
+						</div>
+						<div class="col-sm-12">
+							<button ng-show="$last" class="btn btn-success pull-right finish-editing add-vis" ng-click="addField($parent.$parent.$index)">Add Field</button>
+							<button ng-show="$last && $index > 0" class="btn btn-warning pull-right finish-editing add-vis" ng-click="deleteField($parent.$parent.$index)">Remove Field</button>
+						</div>
+
+					</div>				
+
+				</div>
+			</div>
+			<div class="col-sm-12">
+				<button class="btn btn-success pull-right finish-editing add-vis" ng-click="addList($index)">Add List</button>
+				<button ng-show="numOfLists > 0" class="btn btn-warning pull-right finish-editing add-vis" ng-click="deleteList($index)">Delete List</button>
+			</div>
+			<div ng-repeat="vis in schema.visualizationSchema">	
+
+				<label ng-if="vis.visType == 'line graph'"  class="form-label">{{vis.visType}}: </label>
+				<div ng-if="vis.visType == 'line graph'">
+					<div class="col-sm-12">
+						<input class="form-control col-sm-6" placeholder="Title" type="text" ng-model="vis.title">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" placeholder="X-Axis" type="text" ng-model="vis.xAxis">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" placeholder="X-Axis Label" type="text" ng-model="vis.xAxisLabel">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" placeholder="Y-Axis" type="text" ng-model="vis.yAxis">
+					</div>
+					<div class="col-sm-6"> 
+						<input class="form-control col-sm-6" placeholder="Y-Axis Label" type="text" ng-model="vis.yAxisLabel">
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-12">
+				<button class="btn btn-success add-vis pull-right" ng-click="addGraph($index)">Add Graph</button>
+				<button ng-show="numOfGraphs" class="btn btn-warning add-vis pull-right" ng-click="deleteGraph($index)">Delete Graph</button>
+			</div>
+
+			<!-- <label class="form-label">User Id: </label>
+			<input class="form-control" ng-disabled="true" type="text" ng-model="schema.userId">
+			<label class="form-label">Schema Id: </label>
+			<input class="form-control" ng-disabled="true" type="text" ng-model="schema.schemaId"> -->
+			<button class="btn btn-success pull-right finish-editing" ng-click="createFinalObject(schema)">Create</button>
+			<div ng-show="successfulCreation" class="alert alert-success col-sm-12" role="alert" ng-click="goToDataGeneration()"><b>You successfully created a Custom Data Schema! Click me to generate some Custom Data!</b></div>
 		</div>
 	</div>
-	<div ng-repeat="lineGraph in lineGraphs" class="form-inline">
-	    <div class="form-inline">
-	    	<div class="form-inline">
-	    		<input type="text" class="form-control" placeholder="x-axis field" ng-model="lineGraph.xAxis">
-	    		<input type="text" class="form-control" placeholder="y-axis field" ng-model="lineGraph.yAxis">
-	    	</div>
-	    	<div class="form-inline" >
-	    		<div ng-repeat="label in lineGraph.labels">
-	    			<input type="text" class="form-control" placeholder="x-axis label" ng-model="lineGraph.xAxisLabel">
-	    			<input type="text" class="form-control" placeholder="y-axis label" ng-model="lineGraph.yAxisLabel">
-	    			<input type="text" class="form-control" placeholder="title label" ng-model="lineGraph.title">
-	    		</div>
-	    		<!-- <button class="btn btn-primary" ng-click="addLineGraphLabel($index)">+</button>
-	    		<button class="btn btn-primary" ng-click="removeLineGraphLabel($index)" ng-hide="lineGraph.labels.length < 2">-</button> -->
-	    	</div>
-	    </div>
-	</div>
-<!-- 		<span class="input-group-btn">
-        	<button class="btn btn-primary" ng-click="addSections()">+</button>
-       		<button class="btn btn-primary" ng-click="removeSections()" ng-hide="sections.length < 2">-</button>
-      	</span> -->
-  </form>
-  <button class="btn btn-success" ng-click="createFinalObject()">Submit</button>
-</div>
 
 <div ng-include="'components/footer/footer.html'"></div>
