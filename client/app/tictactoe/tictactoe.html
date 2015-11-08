@@ -8,8 +8,9 @@
 		<span class="container col-md-1">
 			<button type="button" class="btn btn-danger" ng-click="exitGame()"><span class="glyphicon glyphicon-chevron-left"></span> LEAVE</button> 
 		</span>
-		<span class="container col-sm-2" ng-model="currentGame" style="margin-top:175px;">
-			<p style="text-align:right;">Player 1: {{currentGame.playerX.name}}</p>
+		<span class="container col-sm-3" ng-model="currentGame" style="margin-top:175px;">
+			<p style="text-align:right;">Player 1: <br/>
+				{{currentGame.playerX.name}}</p>
 		</span>
 		<span class="container col-md-4 text-center">
 			<div>
@@ -36,8 +37,9 @@
 				<button type="button" class="btn btn-default tButton" onclick="this.blur()" ng-click="claimSquare(8)" >{{currentGame.values[8]}}</button>
 			</span>
 		</span>
-		<span class="container col-sm-2" ng-model="currentGame" style="margin-top:175px;">
-			<p style="text-align:left;">Player 2: {{currentGame.playerO.name}}</p>
+		<span class="container col-sm-4" ng-model="currentGame" style="margin-top:175px;">
+			<p style="text-align:left;">Player 2: <br/>
+				{{currentGame.playerO.name}}</p>
 		</span>
 	</div>
 	<div class="container" ng-model="lobbyMessage" ng-hide="currentGame != null">

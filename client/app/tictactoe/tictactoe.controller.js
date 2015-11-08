@@ -45,10 +45,10 @@ angular.module('gAmPieApp')
     	$scope.currentGame = game;
     	$scope.values = $scope.currentGame.values;
     	console.log($scope.currentGame.playerX);
+    	
     	if ($scope.currentGame.playerX && $scope.currentUser._id == $scope.currentGame.playerX._id)
     		$scope.currentGame.playerX = $scope.currentUser;
-
-    	if ($scope.currentGame.playerX && !$scope.currentGame.playerO)
+    	else if ($scope.currentGame.playerX && !$scope.currentGame.playerO)
     	{
     		$scope.currentGame.message = "It is player 1's turn";
     		console.log("there is already a player 1, adding player 2...");
@@ -191,9 +191,14 @@ angular.module('gAmPieApp')
     	var temp;
     	console.log("PLAYERS(1): " + $scope.player + " " + $scope.currentGame.playerX + " " + $scope.currentGame.playerO);
     	if ($scope.player == 'X') {
-    		$scope.currentGame.message = "The host left. Exiting...";
-    		$scope.currentGame.timer = 5;
-	    	$scope.currentGame.playerX = null; 
+    		if ($scope.currentGame.playerO) {
+    			$scope.currentGame.message = "The host left. Exiting...";
+    			$scope.currentGame.timer = 5;
+	    	}
+	    	else {
+	    		console.log("Left without doing anything...");
+	    	}
+	    	$scope.currentGame.playerX = null;
 	    }
 	    else if ($scope.player == 'O') {
     		$scope.currentGame.message = "Player 2 left"
