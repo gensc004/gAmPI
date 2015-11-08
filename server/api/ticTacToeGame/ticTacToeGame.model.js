@@ -6,7 +6,8 @@ var ObjectIdSchema = Schema.ObjectId;
 var ObjectId = mongoose.Types.ObjectId;
 var TicTacToeGameSchema = new Schema({
   isActive: Boolean,
-  name: Number,
+  game_id: Number,
+  name: String,
   message: String,
   playerX: Schema.Types.Mixed,
   playerO: Schema.Types.Mixed,
