@@ -3,7 +3,6 @@
 angular.module('gAmPieApp')
   .controller('TictactoeCtrl', function ($scope, socket, $http, Auth, $interval, $timeout) {
   	console.log("Logged in? " + Auth.isLoggedIn());
-  	console.log(Auth.getCurrentUser());
     var test = Auth.isLoggedIn();
   	if (test){
   		
@@ -11,10 +10,23 @@ angular.module('gAmPieApp')
       console.log(Auth);
       //window.location.href = '/login';
     }
+
+    Auth.isLoggedInAsync(function(isLoggedIn) {
+      if(!isLoggedIn) {
+        window.location.href = '/login/tictactoe';
+      }
+    })
+
   	$scope.currentUser = Auth.getCurrentUser();
-  	console.log($scope.currentUser);
-  	$scope.player = 'X';
-  	$scope.countingDown = false;
+   //  var notResolved = true
+   //  while(notResolved) {
+   //    console.log($scope.currentUser.$resolved)
+   //    if($scope.currentUser.$resolved == true) {
+   //      notResolved = false;
+   //      if(!$scope.currentUser._id) {
+   //        window.location.href = '/login';
+   //      }
+   //    }
     
 
     $scope.joinGame = function(game) {
