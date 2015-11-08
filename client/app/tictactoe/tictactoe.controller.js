@@ -50,23 +50,32 @@ angular.module('gAmPieApp')
     		$scope.currentGame.playerX = $scope.currentUser;
     	else if ($scope.currentGame.playerO && $scope.currentUser._id == $scope.currentGame.playerO._id)
     		$scope.currentGame.playerO = $scope.currentUser;
+    	//if there is JUST a player 1:
     	else if ($scope.currentGame.playerX && !$scope.currentGame.playerO)
     	{
-    		$scope.currentGame.message = "It is player 1's turn";
-    		$scope.resetTimer($scope.currentGame);
-    		$scope.currentGame.countingDown = true;
-    		$scope.player = 'O';
-    		$scope.currentGame.isActive = true;
-    		$scope.currentGame.playerO = $scope.currentUser;
+    		console.log(game.message);
+    		//Check that the game isn't already over:
+    		if ($scope.currentGame.message.indexOf("wins") < 0 && $scope.currentGame.message.indexOf("tie") < 0) {
+    			console.log($scope.currentGame.message);
+    			//Start a new game (or continue one), beginning with Player 1:
+	    		$scope.currentGame.isActive = true;
+    			$scope.currentGame.message = "It is player 1's turn";
+    			$scope.resetTimer($scope.currentGame);
+    			$scope.currentGame.countingDown = true;
+    			$scope.player = 'O';
+    			$scope.currentGame.playerO = $scope.currentUser;
+    		}
     	}
-    	//we might not need this later
+    	//If there is NO X player:
     	else if (!$scope.currentGame.playerX)
     	{
-    		$scope.resetTimer($scope.currentGame);
-    		$scope.currentGame.countingDown = false;
-    		$scope.player = 'X';
-    		$scope.currentGame.playerX = $scope.currentUser;
-    		console.log("Player 1: " + $scope.currentGame.playerX._id);
+    		if ($scope.currentGame.message.indexOf("wins") < 0 && $scope.currentGame.message.indexOf("tie") < 0) {
+    			$scope.resetTimer($scope.currentGame);
+    			$scope.currentGame.countingDown = true;
+    			$scope.player = 'X';
+    			$scope.currentGame.playerX = $scope.currentUser;
+    			console.log("Player 1: " + $scope.currentGame.playerX._id);
+    		}
     	}
     	$http.put('/api/ticTacToeGame/' + $scope.currentGame._id, $scope.currentGame).success(function(success) {
     		console.log(success)
@@ -147,7 +156,7 @@ angular.module('gAmPieApp')
     			$scope.currentGame.countingDown = false;
     			$interval.cancel($scope.countdown);
     			$scope.currentGame.isActive = false;
-    			$scope.currentGame.message = "Cat's game!";
+    			$scope.currentGame.message = "It's a tie!";
     		}
     		else if($scope.player == 'X') {
     			$scope.currentGame.turn = 'O'
@@ -202,7 +211,9 @@ angular.module('gAmPieApp')
 	    	$scope.currentGame.playerX = null;
 	    }
 	    else if ($scope.player == 'O') {
-    		$scope.currentGame.message = "Player 2 left";
+    		if ($scope.currentGame.message.indexOf("wins") < 0 && $scope.currentGame.message.indexOf("tie") < 0) {
+    			$scope.currentGame.message = "Player 2 left";
+	    	}
 	    	$scope.currentGame.playerO = null;
 	    }
 	    temp = $scope.currentGame;
