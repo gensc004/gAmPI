@@ -22,7 +22,7 @@
 		
 			<div ng-if="vis.visType == 'line graph'">
 				<div ng-hide="instance.showGraph != true">
-					<nvd3 options="options" data="instance.data" class="with-3d-shadow with-transitions" ></nvd3>
+					<nvd3 options="instance.options" data="instance.data" class="with-3d-shadow with-transitions" ></nvd3>
 				</div>
 			<!-- <div ng-repeat="dataPoint in instance.dataPoints">
 				<div ng-repeat="field in vis.sections">

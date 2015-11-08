@@ -48,35 +48,44 @@ angular.module('gAmPieApp')
 	    	console.log(success)
 	    	$scope.schema = success.payload[0];
 	    	console.log($scope.schema);
-	    	$http.get('/api/customDataInstance/finder/query?schemaId=' + $scope.schema.schemaId + '&limit=100').success(function(success) {
-	    		console.log(success)
-		    	$scope.instances = success.payload;
-		    	for(var i = 0; i < $scope.instances.length; i++) {
-		    		$scope.instances[i]
-		    		$scope.instances[i].data = [{
-		    			values: [],
-		    			key: 'key',
-		    			color: '#ff7f0e'
-		    		}];
-		    		for(var j = 0; j < $scope.instances[i].dataPoints.length; j++) {
-		    			$scope.instances[i].data[0].values.push({x: $scope.instances[i].dataPoints[j][$scope.schema.visualizationSchema[0].xAxis], y: $scope.instances[i].dataPoints[j][$scope.schema.visualizationSchema[0].yAxis]})
-		    		}
-		    	}
-		    	console.log([$scope.instances[0].data])
-		    	$scope.data = $scope.instances[0].data;
-		    	console.log($scope.instances)
-		    })
+	    	var startGraph;
+	    	for(var i = 0; i < $scope.schema.visualizationSchema.length; i++){
+	    		if($scope.schema.visualizationSchema[i].visType == "line graph"){
+	    			console.log('hey')
+	    			startGraph = i;
+	    			break;
+	    		}
+	    	}
+	    	if(startGraph || startGraph == 0){
+		    	$http.get('/api/customDataInstance/finder/query?schemaId=' + $scope.schema.schemaId).success(function(success) {
+		    		console.log(success)
+			    	$scope.instances = success.payload;
+			    	for(var i = 0; i < $scope.instances.length; i++) {
+			    		$scope.instances[i]
+			    		$scope.instances[i].data = [{
+			    			values: [],
+			    			key: 'key',
+			    			color: '#ff7f0e'
+			    		}];
+			    		$scope.instances[i].options = $scope.options;
+			    		for(var h = startGraph; h < $scope.schema.visualizationSchema.length; h++){
+			    			$scope.instances[i].options.chart.xAxis.axisLabel = $scope.schema.visualizationSchema[h].xAxisLabel;
+			    			$scope.instances[i].options.chart.yAxis.axisLabel = $scope.schema.visualizationSchema[h].yAxisLabel;
+			    			$scope.instances[i].options.title.text = $scope.schema.visualizationSchema[h].title;
+				    		for(var j = 0; j < $scope.instances[i].dataPoints.length; j++) {
+				    			if($scope.instances[i])
+				    			$scope.instances[i].data[0].values.push({x: $scope.instances[i].dataPoints[j][$scope.schema.visualizationSchema[h].xAxis], y: $scope.instances[i].dataPoints[j][$scope.schema.visualizationSchema[h].yAxis]})
+				    		}
+				    	}
+			    	}
+			    	console.log([$scope.instances[0].data])
+			    	$scope.data = $scope.instances[0].data;
+			    	console.log($scope.instances)
+
+		    	})
+		    }
 	    })
 
-	    
-
-	    $scope.addPoint = function() {
-	    	$http.post('/api/customDataInstances', {schemaId: $scope.schema.schemaId,dataPoints: [{item: "Henry sucks", player: "Bob"}, {item: "lol", player: "loler"}]}).success(function(success) {
-	    		console.log(success);
-
-	    	})
-	    }
-	    //$scope.addPoint()
   	} else {
   		$http.get('/api/customDataSchema').success(function(success) {
   			$scope.schemas = success.payload;

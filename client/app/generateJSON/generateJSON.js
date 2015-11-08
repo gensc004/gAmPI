@@ -7,5 +7,10 @@ angular.module('gAmPieApp')
         url: '/generateJSON/:genCategory',
         templateUrl: 'app/generateJSON/generateJSON.html',
         controller: 'GenerateJSONCtrl'
+      })
+      .state('generateJSONAll', {
+        url: '/generateJSON',
+        templateUrl: 'app/generateJSON/generateJSON.html',
+        controller: 'GenerateJSONCtrl'
       });
   });

@@ -14,14 +14,14 @@
   </div>
   <form class="thing-form">
     <label>Fields</label>
-    <div class="input-group">
+    <div class="form-inline">
     	<div ng-repeat="field in numFields" class="form-inline">
       		<input type="text" class="form-control" placeholder="field name" ng-model="numFields[$index].field"> : 
       		<!--<input type="text" class="form-control" placeholder="field type" ng-model="numFields[$index].fieldType">-->
       		<select ng-model="numFields[$index].fieldType" class="form-control">
       			<option value="string">String</option>
       			<option value="number">Number</option>
-      			<option value="array">Array</option>
+      			<option value="array">Date</option>
       		</select>
       	</div>
       <span class="input-group-btn">
@@ -40,16 +40,15 @@
 	<div ng-repeat="list in lists">
 		<label class="col-sm-12">Visuals</label>
 	    <div>
-		    <div class="input-group">
-		    	<div ng-repeat="section
-		    	 in list.sections" class="form-inline">
+		    <div class="form-inline">
+		    	<div ng-repeat="section in list.sections" class="form-inline">
 		      		<!--<input type="text" class="form-control" placeholder="section name" ng-model="sections[$index].style"> -->
 		      		<select ng-model="section.style" class="form-control">
 		      			<option value="Title">Title</option>
 		      			<option value="Property">Property</option>
 		      			<option value="Property-bold">Property-bold</option>
 		      		</select>: 
-		      		<input type="text" class="form-control" placeholder="section type" ng-model="section.fieldName">
+		      		<input type="text" class="form-control" placeholder="field name" ng-model="section.fieldName">
 		      	</div>
 		      <span class="input-group-btn">
 		        <button class="btn btn-primary" ng-click="addSection($index)">+</button>
@@ -58,26 +57,27 @@
 		    </div>
 		</div>
 	</div>
-	<div ng-repeat="lineGraph in lineGraphs">
-	    <div class="input-group">
+	<div ng-repeat="lineGraph in lineGraphs" class="form-inline">
+	    <div class="form-inline">
 	    	<div class="form-inline">
 	    		<input type="text" class="form-control" placeholder="x-axis field" ng-model="lineGraph.xAxis">
 	    		<input type="text" class="form-control" placeholder="y-axis field" ng-model="lineGraph.yAxis">
 	    	</div>
 	    	<div class="form-inline" >
 	    		<div ng-repeat="label in lineGraph.labels">
-	    			<input type="text" class="form-control" placeholder="label" ng-model="label.name">
-	    			<input type="text" class="form-control" placeholder="label" ng-model="label.field">
+	    			<input type="text" class="form-control" placeholder="x-axis label" ng-model="lineGraph.xAxisLabel">
+	    			<input type="text" class="form-control" placeholder="y-axis label" ng-model="lineGraph.yAxisLabel">
+	    			<input type="text" class="form-control" placeholder="title label" ng-model="lineGraph.title">
 	    		</div>
-	    		<button class="btn btn-primary" ng-click="addLineGraphLabel($index)">+</button>
-	    		<button class="btn btn-primary" ng-click="removeLineGraphLabel($index)" ng-hide="lineGraph.labels.length < 2">-</button>
+	    		<!-- <button class="btn btn-primary" ng-click="addLineGraphLabel($index)">+</button>
+	    		<button class="btn btn-primary" ng-click="removeLineGraphLabel($index)" ng-hide="lineGraph.labels.length < 2">-</button> -->
 	    	</div>
 	    </div>
 	</div>
-		<span class="input-group-btn">
+<!-- 		<span class="input-group-btn">
         	<button class="btn btn-primary" ng-click="addSections()">+</button>
        		<button class="btn btn-primary" ng-click="removeSections()" ng-hide="sections.length < 2">-</button>
-      	</span>
+      	</span> -->
   </form>
   <button class="btn btn-success" ng-click="createFinalObject()">Submit</button>
 </div>

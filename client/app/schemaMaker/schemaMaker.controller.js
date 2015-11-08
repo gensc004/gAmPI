@@ -41,12 +41,12 @@ angular.module('gAmPieApp')
     	$scope.lists[listId].sections.splice($scope.lists[listId].sections.length - 1, 1);
     }
 
-    $scope.addLineGraphLabel = function(listId){
-    	$scope.lineGraphs[listId].labels.push({name:'', field:''});
-    }
-    $scope.removeLineGraphLabel = function(listId){
-    	$scope.lineGraphs[listId].labels.splice($scope.lineGraphs[listId].labels.length - 1, 1);
-    }
+    // $scope.addLineGraphLabel = function(listId){
+    // 	$scope.lineGraphs[listId].labels.push({name:'', field:''});
+    // }
+    // $scope.removeLineGraphLabel = function(listId){
+    // 	$scope.lineGraphs[listId].labels.splice($scope.lineGraphs[listId].labels.length - 1, 1);
+    // }
 
 
 
