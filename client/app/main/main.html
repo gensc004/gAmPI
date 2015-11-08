@@ -5,6 +5,7 @@
     <img id="logo" src="assets/images/pie.png">
     <p id="motto">Video Game APIs Made Simple</p>
     <!-- <p class="lead">This is our motto</p> -->
+    <button ng-click="showTutorial = !showTutorial" class="btn btn-success btn-lg pull-right">Tutorial</button>
   </div>
 </header>
 
@@ -17,13 +18,13 @@
       <p>Gampie is a tool to store any game match results of your video game and automatially wrap an API around that data. Track anything from team kills to gold collected. It is perfect to serve everyone your video game data.
       </p>
     </div>
-    <div class="col-md-6 section-pic"> pic </div>
+    <div class="col-md-6 section-pic">  </div>
   </div>
 </section>
 
 <section class="section-row" ng-hide="showTutorial">
   <div class="container">
-  <div class="col-md-6 section-pic"> pic </div>
+  <div class="col-md-6 section-pic">  </div>
     <div class="col-md-6"> 
       <h2>For Developers</h2>
       <p>Video game developers utilize this tool as an alternative homebrew API. Automate the entire process by building schemas and importing simple data points for your user base. Third party developers make tools for games they are passionate about from the data collected here. 
@@ -39,16 +40,32 @@
       <p>View your match histroy, calculate improvements, or watch your win-rate rise. Gamers can utilize public data for improving their game. Gamers interested in following pro players follow their season and watch their improvements. 
       </p>
     </div>
-    <div class="col-md-6 section-pic"> pic </div>
+    <div class="col-md-6 section-pic">  </div>
   </div>
 </section>
 
 <section class="section-row" ng-show="showTutorial">
   <div class="container">
     <div class="col-md-12"> 
-      <h2>How to use:</h2>
-      <p>Gampie is a tool to store any game match results of your video game and automatially wrap an API around that data. Track anything from team kills to gold collected. It is perfect to serve everyone your video game data.
-      </p>
+      <h2>How to use gAmPie:</h2>
+
+<ol> To get the most out of our Node Knockout project, be sure to do the following:
+<li>Make an account with us using the ‘sign up’ button in the upper-left (Don’t worry about using a real email address, just so long as it follows the format xxx@xxx.xxx) </li>
+<li>Try out our demo game, an online competitive Tic-Tac-Toe game, to get a sense of the types of data gAmPie works with. Find a waiting opponent in the lobby to challenge, or create a new room and wait for someone to come to you.</li>
+<li> Go the the ‘Visualization’ tab to find the data we collected from your Tic-Tac-Toe games. 
+  <ol type=”i”>
+<li>Click ‘Tic Tac Toe Example Schema’, and then ‘Tic Tac Toe Multiplayer’. </li>
+<li>Here you’ll find a chart of every unique name to play our game, with their win and loss record. It’s simple data for a simple game, but gAmPie could be used to create all sorts of charts and visualizations when used with a more complicated subject. </li>
+</li>
+<li>Next, go under the ‘Schemas’ tab to see how gAmPie decides what data to show you and how.
+<ol type=”I”> 
+<li>Under ‘View Schemas’, you can see the existing schemas in our database. A schema is a model for a game’s data, and will hold different information for each game (note that you’ll only be able to edit or delete a schema made by yourself). </li>
+<li>Under ‘Make Schemas’, you can add your own custom schema to the database! Pretend you’re creating a data visualization app for a game, or just fill up our data with dirty words. Then check View Schemas again to see your changes! </li>
+</li>
+<li> If you were connecting a video game to our API, this is where you’d start to see your data come in and our system display it. Since you (probably) haven’t just put the finishing touches on the world’s next indie game masterpiece, we’ve provided some tools for you to generate some dummy data. 
+Under the ‘Data Generator’ tab, choose one of the three sample schemas to generate data for. Once you’ve plugged in some numbers, you’ll be prompted to move back to the ‘Visualization’ tab and see a visual representing what you entered! </li>
+</ol>
+<p>On behalf of the gAmPie team, thanks for checking out our project, and happy Node Knockout!</p>
     </div>
     <!-- <div class="col-md-6 section-pic"> pic </div> -->
   </div>
