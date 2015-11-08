@@ -4,12 +4,9 @@ angular.module('gAmPieApp')
   .controller('TictactoeCtrl', function ($rootScope, $scope, socket, $http, Auth, $interval, $timeout) {
   	console.log("Logged in? " + Auth.isLoggedIn());
   	console.log(Auth.getCurrentUser());
-    var test = Auth.isLoggedIn();
-  	if (test){
-  		
-  	} else {
+  	if (!Auth.isLoggedIn()) {
       console.log(Auth);
-      //window.location.href = '/login';
+      window.location.href = '/login';
     }
   	$scope.currentUser = Auth.getCurrentUser();
   	console.log($scope.currentUser);
@@ -20,11 +17,12 @@ angular.module('gAmPieApp')
     	console.log(e)
     	$scope.exitGame();
     }
-    // $rootScope.$on('$locationChangeStart', function( event ) {
-    // 	console.log(event)
-    // 	$scope.exitGame();
 
-    // })
+    $rootScope.$on('$locationChangeStart', function( event ) {
+    	console.log(event)
+    	$scope.exitGame();
+
+    })
 
     $scope.joinGame = function(game) {
     	if (game.playerO && game.playerX) {
@@ -154,13 +152,15 @@ angular.module('gAmPieApp')
     }
 
     $scope.createGame = function() {
+    	var id = $scope.getName();
     	var newGame = {
     		isActive: false,
     		playerX: $scope.currentUser,
     		playerO: null,
     		turn: 'X',
     		values: ['_', '_', '_', '_', '_', '_', '_', '_', '_'],
-    		name: $scope.getName(),
+    		game_id: id,
+    		name: "Game " + id,
     		message: "Waiting for second player..."
     	};
     	$http.post('/api/ticTacToeGame', newGame).success(function(success) {
@@ -203,7 +203,7 @@ angular.module('gAmPieApp')
 
     $scope.filterFn = function(game)
   	{
-  		return !game.playerO;
+  		return !game.playerO && game.playerX;
   	}
 
   	$scope.getName = function()
@@ -212,7 +212,7 @@ angular.module('gAmPieApp')
   			return 1;
   		}
   		else {
-  			return $scope.games[$scope.games.length - 1].name + 1;
+  			return $scope.games[$scope.games.length - 1].game_id + 1;
   		}
   	}
 
