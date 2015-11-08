@@ -12,7 +12,9 @@ var TicTacToeGameSchema = new Schema({
   playerO: Schema.Types.Mixed,
   turn: String,
   values: [String],
-  winner: String
+  winner: String,
+  timer: Number,
+  countingDown: Boolean
 });
 
 TicTacToeGameSchema.statics.query = function query(q) {
