@@ -3,3 +3,34 @@
 
 $btnText:                           #fff;
 $btnTextAlt:                        #000;
+
+
+body {
+	background-color: #0772D4 !important;
+	min-width: 100%;
+	min-height: 100%;
+}
+
+.login-container {
+	padding-top: 3rem;
+	padding-bottom: 3rem;
+	padding-left: 3rem;
+	padding-right: 3rem;
+	width: 30%;
+	height: 50rem;
+	background-color: #F5F5F5;
+	border-radius: 10px;
+	-webkit-box-shadow: 0px 10px 0px 0px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0px 10px 0px 0px rgba(0,0,0,0.5);
+	box-shadow: 0px 10px 0px 0px rgba(0,0,0,0.5);
+}
+
+form {
+    position: relative;
+    top: 50%;
+    transform: translateY(-70%);
+}
+
+h1, p {
+	text-align: center;
+}
