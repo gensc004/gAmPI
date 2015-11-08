@@ -3,15 +3,23 @@
 angular.module('gAmPieApp')
   .controller('TictactoeCtrl', function ($rootScope, $scope, socket, $http, Auth, $interval, $timeout) {
   	console.log("Logged in? " + Auth.isLoggedIn());
-  	console.log(Auth.getCurrentUser());
-  	if (!Auth.isLoggedIn()) {
-      console.log(Auth);
-      window.location.href = '/login';
-    }
+
+    Auth.isLoggedInAsync(function(isLoggedIn) {
+      if(!isLoggedIn) {
+        window.location.href = '/login/tictactoe';
+      }
+    })
+
   	$scope.currentUser = Auth.getCurrentUser();
-  	console.log($scope.currentUser);
-  	$scope.player = 'X';
-  	$scope.countingDown = false;
+   //  var notResolved = true
+   //  while(notResolved) {
+   //    console.log($scope.currentUser.$resolved)
+   //    if($scope.currentUser.$resolved == true) {
+   //      notResolved = false;
+   //      if(!$scope.currentUser._id) {
+   //        window.location.href = '/login';
+   //      }
+   //    }
     
     window.onbeforeunload = function(e) {
     	console.log(e)

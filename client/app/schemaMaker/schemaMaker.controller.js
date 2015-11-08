@@ -3,10 +3,18 @@
 angular.module('gAmPieApp')
   .controller('SchemaMakerCtrl', function ($scope, $http, Auth) {
   	var currentUser = Auth.getCurrentUser();
+
+    Auth.isLoggedInAsync(function(isLoggedIn) {
+      if(!isLoggedIn) {
+        window.location.href = '/login/schemaMaker';
+      }
+    })
   	console.log(currentUser);
     $http.get('/api/customDataSchema').success(function(success) {
         console.log(success)
     })
+
+
     $scope.message = 'Hello';
     $scope.numFields = [{field: '', fieldType:''}];
     $scope.sections = [[{style: '', fieldName: ''}]];
