@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gAmPieApp')
-  .controller('GenerateJSONCtrl', function ($scope, $http, Auth, $stateParams, $state) {
+  .controller('GenerateJSONCtrl', function ($scope, $http, Auth, $stateParams, $state, socket) {
   	$scope.genCategory = $stateParams.genCategory;
   	if($scope.genCategory) {
 	  	$scope.dataSchemas = [];
@@ -41,7 +41,8 @@ angular.module('gAmPieApp')
 	  	 }
 	} else {
 		$http.get('/api/customDataSchema').success(function(success) {
-			$scope.schemas = success.payload
+			$scope.schemas = success.payload;
+			socket.syncUpdates('customDataSchema', $scope.schemas)
 		})
 		$scope.goToInstance = function(schemaName) {
   			$state.go('generateJSON', {genCategory: schemaName})

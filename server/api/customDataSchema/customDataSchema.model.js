@@ -20,12 +20,18 @@ var CustomDataSchemaSchema = new Schema({
 
 CustomDataSchemaSchema.statics.query = function query(q) {
   var query = {};
-  
+
   if(q.name) {
     query['name'] = q.name;
   }
 
   return this.find(query);
 }
+
+CustomDataSchemaSchema.pre('save', function(next) {
+  this.markModified('dataSchema');
+  this.markModified('visualizationSchema');
+  next();
+})
 
 module.exports = mongoose.model('CustomDataSchema', CustomDataSchemaSchema);

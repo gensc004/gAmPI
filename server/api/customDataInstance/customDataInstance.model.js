@@ -20,4 +20,9 @@ CustomDataInstanceSchema.statics.query = function query(q) {
   return this.find(query);
 }
 
+CustomDataInstanceSchema.pre('save', function(next) {
+	this.markModified('dataPoints')
+	next();
+})
+
 module.exports = mongoose.model('CustomDataInstance', CustomDataInstanceSchema);

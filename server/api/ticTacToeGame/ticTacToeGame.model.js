@@ -25,4 +25,11 @@ TicTacToeGameSchema.statics.query = function query(q) {
 	return this.find(query);
 }
 
+TicTacToeGameSchema.pre('save', function(next) {
+  this.markModified('playerX');
+  this.markModified('playerO');
+  this.markModified('values');
+  next();
+})
+
 module.exports = mongoose.model('TicTacToeGame', TicTacToeGameSchema);
