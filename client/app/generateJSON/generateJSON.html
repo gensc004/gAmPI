@@ -1,0 +1,26 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>gAmPIe</h1>
+    <p class="lead">generate game data</p>
+  </div>
+</header>
+<form class="container">
+	<h3>{</h3>
+	<div ng-repeat="field in dataSchema">
+		<div class="container">
+			<label class= "control-label col-sm-1">{{field.field}}:</label>
+			<div class="col-sm-3">
+				<input type="text" class="form-control" placeholder="{{field.fieldType}}" ng-model="dataJSON.dataPoints[0][field.field]"></input>
+			</div>
+		</div>
+	</div>
+	<h3>}</h3>
+</form>
+<button class="btn btn-success" ng-click="sendData()">Send Data</button>
+<footer class="footer">
+  <div class="container">
+      <p>gAmPIe</p>
+  </div>
+</footer>

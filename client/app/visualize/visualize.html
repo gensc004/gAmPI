@@ -7,36 +7,36 @@
   </div>
 </header>
 <div ng-show="visCategory">
-	<div class="vizualize" ng-repeat="vis in schema.visualizationSchema">
-		<div ng-repeat="instance in instances" ng-if="vis.visType == 'list'">
-			<div class="container" ng-click="instance.showList = !instance.showList">
-				{{instance._id}}
-			</div>
-			<div ng-repeat="dataPoint in instance.dataPoints" ng-hide="instance.showList != true">
-				<div ng-repeat="field in vis.sections">
-					<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
+	<div class="vizualize" ng-repeat="instance in instances">
+		<div class="container" ng-click="instance.showList = !instance.showList; instance.showGraph = !instance.showGraph">
+			<button type="button" class="btn btn-default btn-lg btn-block"> {{instance._id}}</button>
+		</div>
+		<div ng-repeat="vis in schema.visualizationSchema">
+			<div ng-if="vis.visType == 'list'">
+				<div ng-repeat="dataPoint in instance.dataPoints" ng-hide="instance.showList != true">
+					<div ng-repeat="field in vis.sections">
+						<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div ng-repeat="instance in instances" ng-if="vis.visType == 'line graph'">
-			<div class="container" ng-click="instance.showGraph = !instance.showGraph">
-				{{instance._id}}
-			</div>
-			<div ng-hide="instance.showGraph != true">
-				<nvd3 options="options" data="instance.data" class="with-3d-shadow with-transitions" ></nvd3>
-			</div>
+		
+			<div ng-if="vis.visType == 'line graph'">
+				<div ng-hide="instance.showGraph != true">
+					<nvd3 options="options" data="instance.data" class="with-3d-shadow with-transitions" ></nvd3>
+				</div>
 			<!-- <div ng-repeat="dataPoint in instance.dataPoints">
 				<div ng-repeat="field in vis.sections">
 					<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
 				</div>
 			</div> -->
+			</div>
 		</div>
 	</div>
 </div>
 
 <div ng-show="!visCategory">
 	<div ng-repeat="schema in schemas" ng-click="goToInstance(schema.name)">
-		{{schema.name}}
+		<button type="button" class="btn btn-default btn-lg btn-block"> {{schema.name}}</button>
 	</div>
 </div>
 
