@@ -1,1 +1,43 @@
-<div>This is the tictactoe view.</div>
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container" ng-hide="currentGame == null">
+	<span class="container col-md-6">
+		<button type="button" class="btn btn-danger" ng-click="exitGame()" style="margin-bottom:10px"><span class="glyphicon glyphicon-chevron-left"></span> BACK</button>
+		<br/>
+		<span> 
+			<button class="tButton" ng-click="claimSquare(0)">{{currentGame.values[0]}}</button>
+			<button class="tButton" ng-click="claimSquare(1)">{{currentGame.values[1]}}</button>
+			<button class="tButton" ng-click="claimSquare(2)">{{currentGame.values[2]}}</button>
+		</span> <br>
+		<span>
+			<button class="tButton" ng-click="claimSquare(3)">{{currentGame.values[3]}}</button>
+			<button class="tButton" ng-click="claimSquare(4)">{{currentGame.values[4]}}</button>
+			<button class="tButton" ng-click="claimSquare(5)">{{currentGame.values[5]}}</button>
+		</span> <br>
+		<span>
+			<button class="tButton" ng-click="claimSquare(6)">{{currentGame.values[6]}}</button>
+			<button class="tButton" ng-click="claimSquare(7)">{{currentGame.values[7]}}</button>
+			<button class="tButton" ng-click="claimSquare(8)">{{currentGame.values[8]}}</button>
+		</span>
+	</span>
+	<span class="container col-md-6" ng-model="currentGame" ng-hide="$scope.countingDown == false">
+		TIME REMAINING: {{timeRemaining}}
+		<br/>
+		<br/>
+		Player 1: {{currentGame.playerX.name}}
+		<br/>
+		Player 2: {{currentGame.playerO.name}}
+		<br/>
+		<br/>
+		{{message}}
+	</span>
+</div>
+<div class="container" ng-hide="currentGame != null">
+	<button type="button" class="btn btn-success" ng-click="createGame()" style="margin-bottom:10px">
+		<span class="glyphicon glyphicon-plus"></span>  CREATE GAME</button>
+	<ul class="list-group">
+		<li class="list-group-item game-list" ng-click="joinGame(game)" ng-repeat="game in games | filter:filterFn">
+			{{game._id}}
+		</li>
+	</ul>
+</div>
