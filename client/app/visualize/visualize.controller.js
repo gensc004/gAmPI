@@ -68,60 +68,61 @@ angular.module('gAmPieApp')
 	    			break;
 	    		}
 	    	}
-	    	if(startGraph || startGraph == 0){
-		    	$http.get('/api/customDataInstance/finder/query?schemaId=' + $scope.schema.schemaId).success(function(success) {
-		    		console.log(success)
-			    	$scope.instances = success.payload;
-			    	socket.syncUpdates('customDataInstance', $scope.instances, function(event, item, array) {
-			    		if(event == 'created'){
-			    			console.log('Something changed')
-			    			if(item.schemaId != $scope.schema.schemaId) {
-			    				$scope.instances.splice($scope.instances.length - 1, 1);
-			    			} else {
-			    				$scope.instances[$scope.instances.length - 1].data = [{
+	    	
+	    	$http.get('/api/customDataInstance/finder/query?schemaId=' + $scope.schema.schemaId).success(function(success) {
+	    		console.log(success)
+		    	$scope.instances = success.payload;
+		    	socket.syncUpdates('customDataInstance', $scope.instances, function(event, item, array) {
+		    		if(event == 'created'){
+		    			console.log('Something changed')
+		    			if(item.schemaId != $scope.schema.schemaId) {
+		    				$scope.instances.splice($scope.instances.length - 1, 1);
+		    			} else {
+		    				$scope.instances[$scope.instances.length - 1].data = [{
+				    			values: [],
+				    			key: 'key',
+				    			color: '#ff7f0e'
+				    		}];
+				    		$scope.instances[$scope.instances.length - 1].data = [{
+				    			values: [],
+				    			key: 'key',
+				    			color: '#ff7f0e'
+				    		}];
+				    		$scope.instances[$scope.instances.length - 1].options = $scope.options;
+				    		for(var h = startGraph; h < $scope.schema.visualizationSchema.length; h++){
+				    			$scope.instances[$scope.instances.length - 1].options.chart.xAxis.axisLabel = $scope.schema.visualizationSchema[h].xAxisLabel;
+				    			$scope.instances[$scope.instances.length - 1].options.chart.yAxis.axisLabel = $scope.schema.visualizationSchema[h].yAxisLabel;
+				    			$scope.instances[$scope.instances.length - 1].options.title.text = $scope.schema.visualizationSchema[h].title;
+					    		for(var j = 0; j < $scope.instances[$scope.instances.length - 1].dataPoints.length; j++) {
+					    			if($scope.instances[$scope.instances.length - 1])
+					    			$scope.instances[$scope.instances.length - 1].data[0].values.push({x: $scope.instances[$scope.instances.length - 1].dataPoints[j][$scope.schema.visualizationSchema[h].xAxis], y: $scope.instances[$scope.instances.length - 1].dataPoints[j][$scope.schema.visualizationSchema[h].yAxis]})
+					    		}
+					    	}
+		    			}
+		    		} else if(event = 'updated') {
+		    			for(var i = 0; i < $scope.instances.length; i++) {
+		    				if($scope.instances[i]._id == item._id) {
+		    					console.log($scope.instances[i].showGraph)
+					    		$scope.instances[i].data = [{
 					    			values: [],
 					    			key: 'key',
 					    			color: '#ff7f0e'
 					    		}];
-					    		$scope.instances[$scope.instances.length - 1].data = [{
-					    			values: [],
-					    			key: 'key',
-					    			color: '#ff7f0e'
-					    		}];
-					    		$scope.instances[$scope.instances.length - 1].options = $scope.options;
+					    		$scope.instances[i].options = $scope.options;
 					    		for(var h = startGraph; h < $scope.schema.visualizationSchema.length; h++){
-					    			$scope.instances[$scope.instances.length - 1].options.chart.xAxis.axisLabel = $scope.schema.visualizationSchema[h].xAxisLabel;
-					    			$scope.instances[$scope.instances.length - 1].options.chart.yAxis.axisLabel = $scope.schema.visualizationSchema[h].yAxisLabel;
-					    			$scope.instances[$scope.instances.length - 1].options.title.text = $scope.schema.visualizationSchema[h].title;
-						    		for(var j = 0; j < $scope.instances[$scope.instances.length - 1].dataPoints.length; j++) {
-						    			if($scope.instances[$scope.instances.length - 1])
-						    			$scope.instances[$scope.instances.length - 1].data[0].values.push({x: $scope.instances[$scope.instances.length - 1].dataPoints[j][$scope.schema.visualizationSchema[h].xAxis], y: $scope.instances[$scope.instances.length - 1].dataPoints[j][$scope.schema.visualizationSchema[h].yAxis]})
+					    			$scope.instances[i].options.chart.xAxis.axisLabel = $scope.schema.visualizationSchema[h].xAxisLabel;
+					    			$scope.instances[i].options.chart.yAxis.axisLabel = $scope.schema.visualizationSchema[h].yAxisLabel;
+					    			$scope.instances[i].options.title.text = $scope.schema.visualizationSchema[h].title;
+						    		for(var j = 0; j < $scope.instances[i].dataPoints.length; j++) {
+						    			if($scope.instances[i])
+						    			$scope.instances[i].data[0].values.push({x: $scope.instances[i].dataPoints[j][$scope.schema.visualizationSchema[h].xAxis], y: $scope.instances[i].dataPoints[j][$scope.schema.visualizationSchema[h].yAxis]})
 						    		}
 						    	}
-			    			}
-			    		} else if(event = 'updated') {
-			    			for(var i = 0; i < $scope.instances.length; i++) {
-			    				if($scope.instances[i]._id == item._id) {
-			    					console.log($scope.instances[i].showGraph)
-						    		$scope.instances[i].data = [{
-						    			values: [],
-						    			key: 'key',
-						    			color: '#ff7f0e'
-						    		}];
-						    		$scope.instances[i].options = $scope.options;
-						    		for(var h = startGraph; h < $scope.schema.visualizationSchema.length; h++){
-						    			$scope.instances[i].options.chart.xAxis.axisLabel = $scope.schema.visualizationSchema[h].xAxisLabel;
-						    			$scope.instances[i].options.chart.yAxis.axisLabel = $scope.schema.visualizationSchema[h].yAxisLabel;
-						    			$scope.instances[i].options.title.text = $scope.schema.visualizationSchema[h].title;
-							    		for(var j = 0; j < $scope.instances[i].dataPoints.length; j++) {
-							    			if($scope.instances[i])
-							    			$scope.instances[i].data[0].values.push({x: $scope.instances[i].dataPoints[j][$scope.schema.visualizationSchema[h].xAxis], y: $scope.instances[i].dataPoints[j][$scope.schema.visualizationSchema[h].yAxis]})
-							    		}
-							    	}
-			    				}
-			    			}
-			    		}
-			    	})
+		    				}
+		    			}
+		    		}
+		    	})
+				if(startGraph || startGraph == 0){
 			    	for(var i = 0; i < $scope.instances.length; i++) {
 			    		$scope.instances[i].data = [{
 			    			values: [],
@@ -142,9 +143,8 @@ angular.module('gAmPieApp')
 			    	console.log([$scope.instances[0].data])
 			    	$scope.data = $scope.instances[0].data;
 			    	console.log($scope.instances)
-
-		    	})
-		    }
+			    }
+	    	})
 	    }
 
 	    $scope.getInstances();
