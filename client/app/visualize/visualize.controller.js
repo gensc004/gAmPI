@@ -5,13 +5,14 @@ angular.module('gAmPieApp')
   	console.log($stateParams.visCategory);
     $scope.message = 'Hello';
 
-    $http.get('/api/customDataSchema/query?name=' + $stateParams.visCategory).success(function(success) {
+    $http.get('/api/customDataSchema/finder/query?name=' + $stateParams.visCategory).success(function(success) {
     	console.log(success)
-    	$scope.schema = success.payload;
+    	$scope.schema = success.payload[0];
     	console.log($scope.schema);
-    	$http.get('/api/customDataInstance/query?schemaId=' + $scope.schema.schemaId).success(function(success) {
-	    	$scope.instance = success.payload;
-	    	console.log($scope.instance)
+    	$http.get('/api/customDataInstance/finder/query?schemaId=' + $scope.schema.schemaId + '&limit=100').success(function(success) {
+    		console.log(success)
+	    	$scope.instances = success.payload;
+	    	console.log($scope.instances)
 	    })
     })
 

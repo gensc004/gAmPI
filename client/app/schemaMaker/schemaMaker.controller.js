@@ -10,6 +10,7 @@ angular.module('gAmPieApp')
     $scope.message = 'Hello';
     $scope.numFields = [{field: '', fieldType:''}];
     $scope.sections = [{style: '', fieldName: ''}];
+    $scope.schemaName = '';
     
 
 
@@ -29,7 +30,7 @@ angular.module('gAmPieApp')
 
     $scope.createFinalObject = function() {
     	var toReturn = {
-    		name:'test',
+    		name: $scope.schemaName,
     		userId: currentUser._id,
     		dataSchema: $scope.numFields,
     		visualizationSchema: [{
