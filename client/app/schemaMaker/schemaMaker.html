@@ -11,15 +11,18 @@
   <div class="form-group">
   		<label>Game Name:</label>
   		<input type="text" class="form-control" placeholder="game name" ng-model="schemaName">
-  		{{schemaName}}
-
   </div>
   <form class="thing-form">
-    <label>Syncs in realtime across clients</label>
+    <label>Fields</label>
     <p class="input-group">
     	<div ng-repeat="field in numFields" class="form-inline">
       		<input type="text" class="form-control" placeholder="field name" ng-model="numFields[$index].field"> : 
-      		<input type="text" class="form-control" placeholder="field type" ng-model="numFields[$index].fieldType">
+      		<!--<input type="text" class="form-control" placeholder="field type" ng-model="numFields[$index].fieldType">-->
+      		<select ng-model="numFields[$index].fieldType" class="form-control">
+      			<option value="string">String</option>
+      			<option value="number">Number</option>
+      			<option value="array">Array</option>
+      		</select>
       	</div>
       <span class="input-group-btn">
         <button class="btn btn-primary" ng-click="addField()">+</button>
@@ -29,18 +32,52 @@
   </form>
 
   <form class="thing-form">
-    <label>Syncs in realtime across clients</label>
-    <p class="input-group">
-    	<div ng-repeat="section
-    	 in sections" class="form-inline">
-      		<input type="text" class="form-control" placeholder="section name" ng-model="sections[$index].style"> : 
-      		<input type="text" class="form-control" placeholder="section type" ng-model="sections[$index].fieldName">
-      	</div>
-      <span class="input-group-btn">
-        <button class="btn btn-primary" ng-click="addSection()">+</button>
-        <button class="btn btn-primary" ng-click="removeSection()" ng-hide="sections.length < 2">-</button>
-      </span>
-    </p>
+    
+    <div class="container row">
+	    <button class="btn btn-info" ng-click="addList()">List</button>
+	    <button class="btn btn-info" ng-click="addLineGraph()">Line Graph</button>
+	</div>
+	<div ng-repeat="list in lists">
+		<label class="col-sm-12">Visuals</label>
+	    <div>
+		    <p class="input-group">
+		    	<div ng-repeat="section
+		    	 in list.sections" class="form-inline">
+		      		<!--<input type="text" class="form-control" placeholder="section name" ng-model="sections[$index].style"> -->
+		      		<select ng-model="section.style" class="form-control">
+		      			<option value="Title">Title</option>
+		      			<option value="Property">Property</option>
+		      			<option value="Property-bold">Property-bold</option>
+		      		</select>: 
+		      		<input type="text" class="form-control" placeholder="section type" ng-model="section.fieldName">
+		      	</div>
+		      <span class="input-group-btn">
+		        <button class="btn btn-primary" ng-click="addSection($index)">+</button>
+		        <button class="btn btn-primary" ng-click="removeSection($index)" ng-hide="list.sections.length < 2">-</button>
+		      </span>
+		    </p>
+		</div>
+	</div>
+	<div ng-repeat="lineGraph in lineGraphs">
+	    <p class="input-group">
+	    	<div class="form-inline">
+	    		<input type="text" class="form-control" placeholder="x-axis field" ng-model="lineGraph.xAxis">
+	    		<input type="text" class="form-control" placeholder="y-axis field" ng-model="lineGraph.yAxis">
+	    	</div>
+	    	<div class="form-inline" >
+	    		<div ng-repeat="label in lineGraph.labels">
+	    			<input type="text" class="form-control" placeholder="label" ng-model="label.name">
+	    			<input type="text" class="form-control" placeholder="label" ng-model="label.field">
+	    		</div>
+	    		<button class="btn btn-primary" ng-click="addLineGraphLabel($index)">+</button>
+	    		<button class="btn btn-primary" ng-click="removeLineGraphLabel($index)" ng-hide="lineGraph.labels.length < 2">-</button>
+	    	</div>
+	    </p>
+	</div>
+		<span class="input-group-btn">
+        	<button class="btn btn-primary" ng-click="addSections()">+</button>
+       		<button class="btn btn-primary" ng-click="removeSections()" ng-hide="sections.length < 2">-</button>
+      	</span>
   </form>
   <button class="btn btn-success" ng-click="createFinalObject()">Submit</button>
 </div>

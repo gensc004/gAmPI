@@ -6,13 +6,21 @@
     <p class="lead">visualize game data</p>
   </div>
 </header>
-
 <div class="vizualize" ng-repeat="vis in schema.visualizationSchema">
-	<div ng-repeat="instance in instances">
+	<div ng-repeat="instance in instances" ng-if="vis.visType == 'list'">
 		<div ng-repeat="dataPoint in instance.dataPoints">
 			<div ng-repeat="field in vis.sections">
 				<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
 			</div>
+		</div>
+	</div>
+	<div ng-repeat="instance in instances" ng-if="vis.visType == 'line graph'">
+
+		<nvd3 options="options" data="instance.data" class="with-3d-shadow with-transitions"></nvd3>
+		<div ng-repeat="dataPoint in instance.dataPoints">
+			<!-- <div ng-repeat="field in vis.sections">
+				<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
+			</div> -->
 		</div>
 	</div>
 </div>
