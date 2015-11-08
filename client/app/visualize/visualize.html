@@ -6,22 +6,37 @@
     <p class="lead">visualize game data</p>
   </div>
 </header>
-<div class="vizualize" ng-repeat="vis in schema.visualizationSchema">
-	<div ng-repeat="instance in instances" ng-if="vis.visType == 'list'">
-		<div ng-repeat="dataPoint in instance.dataPoints">
-			<div ng-repeat="field in vis.sections">
-				<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
+<div ng-show="visCategory">
+	<div class="vizualize" ng-repeat="vis in schema.visualizationSchema">
+		<div ng-repeat="instance in instances" ng-if="vis.visType == 'list'">
+			<div class="container" ng-click="instance.showList = !instance.showList">
+				{{instance._id}}
+			</div>
+			<div ng-repeat="dataPoint in instance.dataPoints" ng-hide="instance.showList != true">
+				<div ng-repeat="field in vis.sections">
+					<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div ng-repeat="instance in instances" ng-if="vis.visType == 'line graph'">
-
-		<nvd3 options="options" data="instance.data" class="with-3d-shadow with-transitions"></nvd3>
-		<div ng-repeat="dataPoint in instance.dataPoints">
-			<!-- <div ng-repeat="field in vis.sections">
-				<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
+		<div ng-repeat="instance in instances" ng-if="vis.visType == 'line graph'">
+			<div class="container" ng-click="instance.showGraph = !instance.showGraph">
+				{{instance._id}}
+			</div>
+			<div ng-hide="instance.showGraph != true">
+				<nvd3 options="options" data="instance.data" class="with-3d-shadow with-transitions" ></nvd3>
+			</div>
+			<!-- <div ng-repeat="dataPoint in instance.dataPoints">
+				<div ng-repeat="field in vis.sections">
+					<p class="{{field.style}}">{{dataPoint[field.fieldName]}}</p>
+				</div>
 			</div> -->
 		</div>
+	</div>
+</div>
+
+<div ng-show="!visCategory">
+	<div ng-repeat="schema in schemas" ng-click="goToInstance(schema.name)">
+		{{schema.name}}
 	</div>
 </div>
 
