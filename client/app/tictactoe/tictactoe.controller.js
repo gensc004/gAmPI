@@ -3,10 +3,14 @@
 angular.module('gAmPieApp')
   .controller('TictactoeCtrl', function ($scope, socket, $http, Auth, $interval, $timeout) {
   	console.log("Logged in? " + Auth.isLoggedIn());
-  	console.log($scope.getCurrentUser);
-  	if (!Auth.isLoggedIn()){
-  		window.location.href = '/login';
-  	}
+  	console.log(Auth.getCurrentUser());
+    var test = Auth.isLoggedIn();
+  	if (test){
+  		
+  	} else {
+      console.log(Auth);
+      //window.location.href = '/login';
+    }
   	$scope.currentUser = Auth.getCurrentUser();
   	console.log($scope.currentUser);
   	$scope.player = 'X';
