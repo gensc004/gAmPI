@@ -6,7 +6,6 @@ $btnTextAlt:                        #000;
 
 
 body {
-	background-color: #0772D4 !important;
 	min-width: 100%;
 	min-height: 100%;
 }
@@ -25,7 +24,14 @@ body {
 	box-shadow: 0px 10px 0px 0px rgba(0,0,0,0.5);
 }
 
-form {
+.from-wrap {
+	padding-top: 150px;
+	height: 100vh;
+	width: 100vw;
+	background-color: #0772D4 !important;
+}
+
+.login-form {
     position: relative;
     top: 50%;
     transform: translateY(-70%);
@@ -33,4 +39,8 @@ form {
 
 h1, p {
 	text-align: center;
+}
+
+.log-reg {
+	text-align:center;
 }
