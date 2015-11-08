@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('gAmPieApp')
-  .controller('TictactoeCtrl', function ($scope, socket, $http, Auth, $interval) {
+  .controller('TictactoeCtrl', function ($scope, socket, $http, Auth, $interval, $timeout) {
+  	console.log("Logged in? " + Auth.isLoggedIn());
   	if (!Auth.isLoggedIn()){
   		window.location.href = '/login';
   	}
@@ -9,13 +10,20 @@ angular.module('gAmPieApp')
   	console.log($scope.currentUser);
   	$scope.player = 'X';
   	$scope.countingDown = false;
-
     
 
     $scope.joinGame = function(game) {
+    	if (game.playerO && game.playerX) {
+    		console.log('oops');
+    		alert("Can't join game! Already two players");
+    	}
+    	else {
     	$scope.currentGame = game;
     	$scope.values = $scope.currentGame.values;
     	console.log($scope.currentGame.playerX);
+    	if ($scope.currentGame.playerX && $scope.currentUser._id == $scope.currentGame.playerX._id)
+    		$scope.currentGame.playerX = $scope.currentUser;
+
     	if ($scope.currentGame.playerX && !$scope.currentGame.playerO)
     	{
     		$scope.currentGame.message = "It is player 1's turn";
@@ -26,13 +34,8 @@ angular.module('gAmPieApp')
     		$scope.currentGame.isActive = true;
     		$scope.currentGame.playerO = $scope.currentUser;
     	}
-    	//else if ($scope.currentGame.playerO)
-    	//{
-    	//	console.log('oops')
-    	//	alert("Can't join game! Already two players");
-    	//}
     	//we might not need this later
-    	else if (!$scope.currentGame.playerO)
+    	else if (!$scope.currentGame.playerX)
     	{
     		console.log("there are no players, adding player 1...")
     		$scope.resetTimer($scope.currentGame);
@@ -45,6 +48,8 @@ angular.module('gAmPieApp')
     		console.log(success)
     	});
     }
+    }
+
     $http.get('/api/ticTacToeGame').success(function(success) {
     	$scope.games = success.payload;
     	if ($scope.openGames($scope.games) == 0) {
@@ -54,16 +59,19 @@ angular.module('gAmPieApp')
     		$scope.lobbyMessage = "Click on a game to join it!"
     	}
     	socket.syncUpdates('ticTacToeGame', $scope.games, function(event, item, array) {
-    		if ($scope.currentGame)
-    			$scope.initializeInterval();
-    			
     		if ($scope.openGames($scope.games) == 0) {
   				$scope.lobbyMessage = "There are no games with open spots. Start a new one!"
     		}
     		else {
     			$scope.lobbyMessage = "Click on a game to join it!"
     		}
-    		if ($scope.currentGame._id == item._id) {
+    		if ($scope.currentGame && $scope.currentGame._id == item._id) {
+    			if (item.isActive)
+    			{
+    				if (!$scope.countdown)
+    					$scope.initializeInterval();
+    				console.log($scope.countdown);
+    			}
  	   			$scope.currentGame=item;
     		}
     	});
@@ -75,14 +83,17 @@ angular.module('gAmPieApp')
 
     $scope.updateTime = function() {
     	if ($scope.currentGame) {
-    		if ($scope.currentGame.countingDown) {
+    		if ($scope.currentGame.countingDown || $scope.currentGame.message == "The host left. Exiting...") {
     		   	if ($scope.currentGame.timer > 0) 
     		   	{
     		   		$scope.currentGame.timer--;
     		   	}
     		   	else if ($scope.currentGame.timer < 1)
   			   	{
-  			   		$scope.randomMove();
+  			   		if ($scope.currentGame.message == "The host left. Exiting...")
+  			   			$scope.exitGame();
+  			   		else
+	  			   		$scope.randomMove();
         		}
     		}
     	}
@@ -119,7 +130,7 @@ angular.module('gAmPieApp')
     			$scope.currentGame.turn = 'O'
     			$scope.currentGame.message = "It is player 2's turn";
     		} 
-    		else {
+    		else if ($scope.player == 'O') {
     			$scope.currentGame.turn = 'X'
     			$scope.currentGame.message = "It is player 1's turn";
     		}
@@ -145,18 +156,31 @@ angular.module('gAmPieApp')
     }
 
     $scope.exitGame = function() {
+    	if ($scope.currentGame.message == "The host left. Exiting..." && $scope.currentGame.timer > 0)
+    	{
+    		return;
+    	}
     	$scope.currentGame.countingDown = false;
-    	console.log("PLAYERS(1): " + $scope.player + " " + $scope.currentGame.playerX + " " + $scope.currentGame.playerY);
-    	if ($scope.player == 'X')
+    	var temp;
+    	console.log("PLAYERS(1): " + $scope.player + " " + $scope.currentGame.playerX + " " + $scope.currentGame.playerO);
+    	if ($scope.player == 'X') {
+    		$scope.currentGame.message = "The host left. Exiting...";
+    		$scope.currentGame.timer = 5;
 	    	$scope.currentGame.playerX = null; 
-	    else
-	    	$scope.currentGame.playerY = null;
-
-	    if (!$scope.currentGame.playerX && !$scope.currentGame.playerY) {
-    		console.log("PLAYERS(2): " + $scope.currentGame.playerX + " " + $scope.currentGame.playerY);
-	    	$http.delete('api/ticTacToeGame/' + $scope.currentGame._id);
 	    }
-    	$scope.currentGame = null;
+	    else if ($scope.player == 'O') {
+    		$scope.currentGame.message = "Player 2 left"
+	    	$scope.currentGame.playerO = null;
+	    }
+	    temp = $scope.currentGame;
+	    $scope.currentGame = null;
+	    $http.put('/api/ticTacToeGame/' + temp._id, temp).success(function (success){
+	    	console.log(success);
+	    });
+	    if (!temp.playerX && !temp.playerO) {
+    		console.log("PLAYERS(2): " + temp.playerX + " " + temp.playerO);
+	    	$http.delete('/api/ticTacToeGame/' + temp._id);
+	    }
     }
     $scope.opponentLeft = function() {
     	$scope.currentGame = null;
@@ -187,6 +211,22 @@ angular.module('gAmPieApp')
   			}
   		}
   		return gameCount;
+  	}
+
+  	$scope.getNumberOfPlayers = function(game) {
+  		var players = 0;
+  		if (game.playerX)
+  			players++;
+  		if (game.playerO)
+  			players++;
+
+  		if (players == 0)
+  			return 'info';
+  		else if (players == 1)
+  			return 'success';
+  		else if (players == 2)
+  			return 'danger';
+  		else return 'danger';
   	}
 
   	$scope.randomMove = function()
@@ -323,6 +363,9 @@ angular.module('gAmPieApp')
   				return true;
   			}
   			else if (board[7] == player && board[8] == player) {
+  				return true;
+  			}
+  			else if (board[4] == player && board[2] == player) {
   				return true;
   			}
   		}
