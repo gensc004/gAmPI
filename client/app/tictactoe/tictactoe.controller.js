@@ -20,6 +20,10 @@ angular.module('gAmPieApp')
    //        window.location.href = '/login';
    //      }
    //    }
+    $scope.currentUser = Auth.getCurrentUser();
+    console.log($scope.currentUser);
+    $scope.player = 'X';
+    $scope.countingDown = false;
     
     window.onbeforeunload = function(e) {
     	console.log(e)
